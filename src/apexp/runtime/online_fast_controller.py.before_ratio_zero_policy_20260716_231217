@@ -1,0 +1,241 @@
+from __future__ import annotations
+
+import json
+import os
+import time
+from collections import deque
+from dataclasses import dataclass, field
+from pathlib import Path
+
+import numpy as np
+
+
+@dataclass
+class RequestState:
+    req_id: str
+    method: str = ""
+    default_k: int = 16
+    current_k: int = 16
+    next_k: int = 16
+    n_blocks: int = 0
+
+    k_hist: deque = field(default_factory=lambda: deque(maxlen=32))
+    accepted_hist: deque = field(default_factory=lambda: deque(maxlen=32))
+    rejected_hist: deque = field(default_factory=lambda: deque(maxlen=32))
+    full_accept_hist: deque = field(default_factory=lambda: deque(maxlen=32))
+    first_rejection_hist: deque = field(default_factory=lambda: deque(maxlen=32))
+
+
+class OnlineFastController:
+    def __init__(self):
+        self.enabled = os.environ.get("APEXP_ONLINE_FAST", "0") == "1"
+        self.method = os.environ.get("APEXP_METHOD", "")
+        self.default_k = int(os.environ.get("APEXP_DEFAULT_K", "16"))
+        self.min_k = int(os.environ.get("APEXP_MIN_K", "1"))
+        self.max_k = int(os.environ.get("APEXP_MAX_K", "16"))
+
+        self.window = int(os.environ.get("APEXP_FAST_WINDOW", "4"))
+        self.min_obs = int(os.environ.get("APEXP_FAST_MIN_OBS", "2"))
+
+        # Hysteresis thresholds.
+        # Downshift if recent accepted fraction is low.
+        self.down_ratio = float(os.environ.get("APEXP_FAST_DOWN_RATIO", "0.45"))
+        # Upshift only if recent accepted fraction is very high.
+        self.up_ratio = float(os.environ.get("APEXP_FAST_UP_RATIO", "0.85"))
+        # Also downshift if average accepted tokens is tiny.
+        self.down_avg_accepted = float(
+            os.environ.get("APEXP_FAST_DOWN_AVG_ACCEPTED", "1.0")
+        )
+        self.up_full_rate = float(os.environ.get("APEXP_FAST_UP_FULL_RATE", "0.75"))
+
+        self.candidate_ks = [
+            int(x)
+            for x in os.environ.get(
+                "APEXP_FAST_CANDIDATE_KS", "1,2,4,8,16"
+            ).split(",")
+            if x.strip()
+        ]
+        self.candidate_ks = sorted(
+            set(k for k in self.candidate_ks if self.min_k <= k <= self.max_k)
+        )
+        if not self.candidate_ks:
+            self.candidate_ks = [self.default_k]
+        if self.default_k not in self.candidate_ks:
+            self.candidate_ks = sorted(set(self.candidate_ks + [self.default_k]))
+
+        self.states: dict[str, RequestState] = {}
+        self.global_next_k = self.default_k
+
+        self.trace_path = os.environ.get("APEXP_ONLINE_FAST_TRACE", "")
+        self.trace_f = None
+        if self.trace_path:
+            Path(self.trace_path).parent.mkdir(parents=True, exist_ok=True)
+            self.trace_f = open(self.trace_path, "a", buffering=1)
+
+    def state(self, req_id: str) -> RequestState:
+        req_id = str(req_id)
+        if req_id not in self.states:
+            self.states[req_id] = RequestState(
+                req_id=req_id,
+                method=self.method,
+                default_k=self.default_k,
+                current_k=self.default_k,
+                next_k=self.global_next_k,
+            )
+        return self.states[req_id]
+
+    def choose_active_k(self, req_id: str, default_k: int) -> int:
+        if not self.enabled:
+            return int(default_k)
+
+        if os.environ.get("APEXP_FORCE_ACTIVE_K"):
+            k = int(os.environ["APEXP_FORCE_ACTIVE_K"])
+        else:
+            st = self.state(str(req_id))
+            k = int(st.next_k if st.next_k is not None else self.global_next_k)
+
+        k = max(self.min_k, min(self.max_k, k))
+        k = min(k, int(default_k))
+
+        self._trace({
+            "time": time.time(),
+            "type": "choose_active_k_for_scheduler",
+            "req_id": str(req_id),
+            "method": self.method,
+            "default_k": int(default_k),
+            "active_k": int(k),
+        })
+
+        return int(k)
+
+    def observe_block_event(self, event: dict):
+        if not self.enabled:
+            return
+
+        req_id = str(event.get("req_id", ""))
+        if not req_id:
+            return
+
+        st = self.state(req_id)
+
+        k_actual = int(event.get("k_actual", event.get("num_draft_tokens", st.current_k)))
+        accepted_len = int(event.get("accepted_len", event.get("num_accepted", 0)))
+        num_rejected = int(event.get("num_rejected", max(0, k_actual - accepted_len)))
+        first_rejection = int(event.get("first_rejection", accepted_len))
+        full_accept = bool(event.get("full_accept", accepted_len >= k_actual))
+
+        st.current_k = k_actual
+        st.n_blocks += 1
+
+        st.k_hist.append(k_actual)
+        st.accepted_hist.append(accepted_len)
+        st.rejected_hist.append(num_rejected)
+        st.first_rejection_hist.append(first_rejection)
+        st.full_accept_hist.append(1 if full_accept else 0)
+
+        old_next_k = st.next_k
+        st.next_k = self._policy(st)
+        self.global_next_k = st.next_k
+
+        stats = self._window_stats(st)
+
+        self._trace({
+            "time": time.time(),
+            "type": "observe_block_after_verify_update_future_k",
+            "req_id": req_id,
+            "method": st.method,
+            "block": st.n_blocks,
+            "k_actual": int(k_actual),
+            "accepted_len": int(accepted_len),
+            "num_rejected": int(num_rejected),
+            "first_rejection": int(first_rejection),
+            "full_accept": bool(full_accept),
+            "window_n": int(stats["n"]),
+            "window_avg_accept_ratio": float(stats["avg_accept_ratio"]),
+            "window_avg_accepted": float(stats["avg_accepted"]),
+            "window_full_rate": float(stats["full_rate"]),
+            "old_next_k": int(old_next_k),
+            "next_k_for_future_unscheduled_block": int(st.next_k),
+        })
+
+    def _window_stats(self, st: RequestState) -> dict:
+        ks = list(st.k_hist)[-self.window:]
+        acc = list(st.accepted_hist)[-self.window:]
+        full = list(st.full_accept_hist)[-self.window:]
+        rej = list(st.rejected_hist)[-self.window:]
+
+        n = min(len(ks), len(acc))
+        if n == 0:
+            return {
+                "n": 0,
+                "avg_accept_ratio": 1.0,
+                "avg_accepted": float(st.current_k),
+                "full_rate": 0.0,
+                "reject_rate": 0.0,
+            }
+
+        ratios = [
+            float(a) / max(float(k), 1.0)
+            for a, k in zip(acc[-n:], ks[-n:])
+        ]
+
+        return {
+            "n": n,
+            "avg_accept_ratio": float(np.mean(ratios)),
+            "avg_accepted": float(np.mean(acc[-n:])),
+            "full_rate": float(np.mean(full[-n:])) if full else 0.0,
+            "reject_rate": float(np.mean([x > 0 for x in rej[-n:]])) if rej else 0.0,
+        }
+
+    def _policy(self, st: RequestState) -> int:
+        cur = int(st.current_k or st.default_k)
+        stats = self._window_stats(st)
+
+        if stats["n"] < self.min_obs:
+            return cur
+
+        avg_ratio = stats["avg_accept_ratio"]
+        avg_accepted = stats["avg_accepted"]
+        full_rate = stats["full_rate"]
+
+        # If most of the proposed tokens are accepted over the moving window,
+        # try a larger k.
+        if avg_ratio >= self.up_ratio and full_rate >= self.up_full_rate:
+            return self._higher(cur)
+
+        # If acceptance is poor over the moving window, reduce k.
+        if avg_ratio <= self.down_ratio or avg_accepted <= self.down_avg_accepted:
+            return self._lower(cur)
+
+        # Otherwise hold k.
+        return cur
+
+    def _lower(self, cur: int) -> int:
+        lows = [k for k in self.candidate_ks if k < cur]
+        return max(lows) if lows else min(self.candidate_ks)
+
+    def _higher(self, cur: int) -> int:
+        highs = [k for k in self.candidate_ks if k > cur]
+        return min(highs) if highs else max(self.candidate_ks)
+
+    def _trace(self, obj: dict):
+        if self.trace_f is not None:
+            self.trace_f.write(json.dumps(obj) + "\n")
+
+
+_CONTROLLER = None
+
+
+def get_online_fast_controller() -> OnlineFastController:
+    global _CONTROLLER
+    if _CONTROLLER is None:
+        _CONTROLLER = OnlineFastController()
+    return _CONTROLLER
+
+
+def choose_active_k(req_id: str, default_k: int) -> int:
+    return get_online_fast_controller().choose_active_k(req_id, default_k)
+
+
+def observe_block_event(event: dict):
+    get_online_fast_controller().observe_block_event(event)

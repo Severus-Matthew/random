@@ -1,0 +1,151 @@
+=== APEX HOT ABLATION ===
+CONFIG_NAME=cap5_w2_allk_1to16_KFIX
+OUT_DIR=results/apexp_block/config_large_500/week2/realtime_hot_e2e_cap5_w2_allk_1to16_KFIX_tracefix
+APEXP_FAST_WINDOW=2
+APEXP_FAST_MIN_OBS=2
+APEXP_MIN_K=1
+APEXP_MAX_K=16
+APEXP_FAST_CANDIDATE_KS=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16
+MAX_PROMPTS_PER_FILE=5
+
+=== GPU state before launch ===
+Mon Jul 20 19:41:57 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.159.04             Driver Version: 580.159.04     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A100-SXM4-40GB          On  |   00000000:10:1C.0 Off |                    0 |
+| N/A   45C    P0            131W /  400W |   22737MiB /  40960MiB |     22%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA A100-SXM4-40GB          On  |   00000000:10:1D.0 Off |                    0 |
+| N/A   42C    P0            151W /  400W |   22663MiB /  40960MiB |     92%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA A100-SXM4-40GB          On  |   00000000:20:1C.0 Off |                    0 |
+| N/A   46C    P0            145W /  400W |   22693MiB /  40960MiB |     25%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA A100-SXM4-40GB          On  |   00000000:20:1D.0 Off |                    0 |
+| N/A   42C    P0            155W /  400W |   22689MiB /  40960MiB |     83%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   4  NVIDIA A100-SXM4-40GB          On  |   00000000:90:1C.0 Off |                    0 |
+| N/A   45C    P0            138W /  400W |   22679MiB /  40960MiB |     36%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   5  NVIDIA A100-SXM4-40GB          On  |   00000000:90:1D.0 Off |                    0 |
+| N/A   43C    P0            146W /  400W |   22687MiB /  40960MiB |     73%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   6  NVIDIA A100-SXM4-40GB          On  |   00000000:A0:1C.0 Off |                    0 |
+| N/A   45C    P0            157W /  400W |   22705MiB /  40960MiB |     39%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   7  NVIDIA A100-SXM4-40GB          On  |   00000000:A0:1D.0 Off |                    0 |
+| N/A   41C    P0            145W /  400W |   22689MiB /  40960MiB |     36%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A         1807151      C   sglang::scheduler_TP0                 21894MiB |
+|    0   N/A  N/A         1810437      C   ray::MegatronTrainRayActor              814MiB |
+|    1   N/A  N/A         1807152      C   sglang::scheduler_TP1                 21880MiB |
+|    1   N/A  N/A         1810702      C   ray::MegatronTrainRayActor              754MiB |
+|    2   N/A  N/A         1807157      C   sglang::scheduler_TP0                 21916MiB |
+|    2   N/A  N/A         1810699      C   ray::MegatronTrainRayActor              754MiB |
+|    3   N/A  N/A         1807158      C   sglang::scheduler_TP1                 21912MiB |
+|    3   N/A  N/A         1810701      C   ray::MegatronTrainRayActor              754MiB |
+|    4   N/A  N/A         1807154      C   sglang::scheduler_TP0                 21902MiB |
+|    4   N/A  N/A         1810703      C   ray::MegatronTrainRayActor              754MiB |
+|    5   N/A  N/A         1807155      C   sglang::scheduler_TP1                 21910MiB |
+|    5   N/A  N/A         1810704      C   ray::MegatronTrainRayActor              754MiB |
+|    6   N/A  N/A         1807161      C   sglang::scheduler_TP0                 21928MiB |
+|    6   N/A  N/A         1810706      C   ray::MegatronTrainRayActor              754MiB |
+|    7   N/A  N/A         1807162      C   sglang::scheduler_TP1                 21924MiB |
+|    7   N/A  N/A         1810705      C   ray::MegatronTrainRayActor              742MiB |
++-----------------------------------------------------------------------------------------+
+
+=== Checking patched file ===
+21:def parse_fast_candidate_ks(raw=None, min_k=1, max_k=16):
+174:    os.environ["APEXP_FAST_CANDIDATE_KS"] = ",".join(str(x) for x in resolved_fast_candidate_ks)    
+268:            "candidate_ks": resolved_fast_candidate_ks,
+382:    args.fast_candidate_ks_list = parse_fast_candidate_ks(
+383:        args.fast_candidate_ks,
+388:    args.fast_candidate_ks = ",".join(str(x) for x in args.fast_candidate_ks_list)
+389:    os.environ["APEXP_FAST_CANDIDATE_KS"] = args.fast_candidate_ks
+390:    def _resolve_fast_candidate_ks(args):
+391:        raw = args.fast_candidate_ks
+411:    resolved_fast_candidate_ks = _resolve_fast_candidate_ks(args)
+412:    args.fast_candidate_ks = ",".join(str(x) for x in resolved_fast_candidate_ks)
+[slow-router] feature columns: 161
+[slow-router] candidate actions: 15
+[slow-router] exact prompt actions: 629
+Process Process-1:
+Traceback (most recent call last):
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/fsx/jmanvi/Internship_project/ASD/src/apexp/week2/realtime_hot_e2e.py", line 174, in worker_process
+    os.environ["APEXP_FAST_CANDIDATE_KS"] = ",".join(str(x) for x in resolved_fast_candidate_ks)
+                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'resolved_fast_candidate_ks' is not defined
+Process Process-2:
+Traceback (most recent call last):
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/fsx/jmanvi/Internship_project/ASD/src/apexp/week2/realtime_hot_e2e.py", line 174, in worker_process
+    os.environ["APEXP_FAST_CANDIDATE_KS"] = ",".join(str(x) for x in resolved_fast_candidate_ks)
+                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'resolved_fast_candidate_ks' is not defined
+Process Process-3:
+Traceback (most recent call last):
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/fsx/jmanvi/Internship_project/ASD/src/apexp/week2/realtime_hot_e2e.py", line 174, in worker_process
+    os.environ["APEXP_FAST_CANDIDATE_KS"] = ",".join(str(x) for x in resolved_fast_candidate_ks)
+                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'resolved_fast_candidate_ks' is not defined
+Process Process-4:
+Traceback (most recent call last):
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/fsx/jmanvi/Internship_project/ASD/src/apexp/week2/realtime_hot_e2e.py", line 174, in worker_process
+    os.environ["APEXP_FAST_CANDIDATE_KS"] = ",".join(str(x) for x in resolved_fast_candidate_ks)
+                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'resolved_fast_candidate_ks' is not defined
+Process Process-5:
+Traceback (most recent call last):
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/fsx/jmanvi/Internship_project/ASD/src/apexp/week2/realtime_hot_e2e.py", line 174, in worker_process
+    os.environ["APEXP_FAST_CANDIDATE_KS"] = ",".join(str(x) for x in resolved_fast_candidate_ks)
+                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'resolved_fast_candidate_ks' is not defined
+[main] waiting for 6 workers to become ready
+Process Process-6:
+Traceback (most recent call last):
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/fsx/jmanvi/Internship_project/ASD/src/apexp/week2/realtime_hot_e2e.py", line 174, in worker_process
+    os.environ["APEXP_FAST_CANDIDATE_KS"] = ",".join(str(x) for x in resolved_fast_candidate_ks)
+                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'resolved_fast_candidate_ks' is not defined

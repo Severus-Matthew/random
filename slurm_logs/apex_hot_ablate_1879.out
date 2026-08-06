@@ -1,0 +1,12 @@
+CONFIG_NAME=cap50_w2_ks_1_2_3_4_5_6_8_12_16
+OUT_DIR=results/apexp_block/config_large_500/week2/realtime_hot_e2e_cap50_w2_ks_1_2_3_4_5_6_8_12_16_tracefix
+APEXP_FAST_WINDOW=2
+APEXP_FAST_MIN_OBS=2
+APEXP_MIN_K=1
+APEXP_MAX_K=16
+APEXP_FAST_CANDIDATE_KS=1,2,3,4,5,6,8,12,16
+MAX_PROMPTS_PER_FILE=50
+Traceback (most recent call last):
+  File "/fsx/jmanvi/Internship_project/ASD/src/apexp/week2/realtime_hot_e2e.py", line 14, in <module>
+    import pandas as pd
+ModuleNotFoundError: No module named 'pandas'

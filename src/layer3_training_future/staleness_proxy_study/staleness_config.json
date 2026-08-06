@@ -1,0 +1,157 @@
+{
+  "_comment": "Multi-family factorial staleness study. Three drift families (two clean interp axes + one real post-training trajectory) x focused sub-studies. The orchestrator runs each study's methods INTERSECTED with each family's available methods, so eagle3 is skipped on families with no aligned head (Tulu).",
+  "paths": {
+    "runner": "src/phase2_workload_characterization/run_benchmark.py",
+    "data_dir": "data/benchmarks/By_split_phase_1",
+    "out_dir": "results/Runs/Phase2",
+    "workload_files": {
+      "code_gen": "code_gen_test.jsonl",
+      "mathematical_reasoning": "mathematical_reasoning_test.jsonl",
+      "hardware_gen": "hardware_gen_test.jsonl",
+      "long_horizon_swe": "long_horizon_swe_test.jsonl",
+      "long_chain_reasoning": "long_chain_reasoning.jsonl",
+      "long_context_completion": "long_context_completion.jsonl",
+      "conversational_generation_gen": "conversational_generation_test_gen.jsonl"
+    }
+  },
+  "defaults": {
+    "limit": 100,
+    "max_tokens": 512,
+    "seed": 42,
+    "gpu_memory_utilization": 0.85,
+    "tensor_parallel_size": 1,
+    "ngram_lookup_min": 1,
+    "ngram_lookup_max": 4
+  },
+  "drift_families": {
+    "qwen_interp": {
+      "_axis": "Base<->Qwen3-8B interpolation (clean, dense, all drafters)",
+      "ref_model": "Qwen/Qwen3-8B",
+      "manifest": "results/drifted_qwen/drift_manifest.csv",
+      "eagle3_model": "RedHatAI/Qwen3-8B-speculator.eagle3",
+      "draft_model": "Qwen/Qwen3-0.6B",
+      "methods_available": [
+        "ngram_sd",
+        "draft_sd",
+        "eagle3"
+      ]
+    },
+    "llama_interp": {
+      "_axis": "Llama-3.1-8B Base<->Instruct interpolation (second clean family)",
+      "ref_model": "meta-llama/Llama-3.1-8B-Instruct",
+      "manifest": "results/drifted_llama/drift_manifest.csv",
+      "eagle3_model": "RedHatAI/Llama-3.1-8B-Instruct-speculator.eagle3",
+      "draft_model": "meta-llama/Llama-3.2-1B-Instruct",
+      "methods_available": [
+        "ngram_sd",
+        "draft_sd",
+        "eagle3"
+      ]
+    },
+    "tulu_trajectory": {
+      "_axis": "REAL post-training path Base->SFT->DPO->RLVR (n-gram + draft_sd only; eagle3 head not aligned to Tulu)",
+      "ref_model": "allenai/Llama-3.1-Tulu-3-8B",
+      "manifest": "results/drifted_tulu/drift_manifest.csv",
+      "eagle3_model": "",
+      "draft_model": "meta-llama/Llama-3.2-1B-Instruct",
+      "methods_available": [
+        "ngram_sd",
+        "draft_sd"
+      ]
+    }
+  },
+  "all_workloads": [
+    "code_gen",
+    "mathematical_reasoning",
+    "hardware_gen",
+    "long_horizon_swe",
+    "long_chain_reasoning",
+    "long_context_completion",
+    "conversational_generation_gen"
+  ],
+  "representative_workloads": [
+    "long_chain_reasoning",
+    "code_gen",
+    "conversational_generation_gen"
+  ],
+  "studies": {
+    "S1_core_drift_curve": {
+      "_purpose": "Headline acceptance-vs-drift per drafter, all workloads.",
+      "families": "ALL",
+      "methods": [
+        "ngram_sd",
+        "draft_sd",
+        "eagle3"
+      ],
+      "k": [
+        4
+      ],
+      "temperature": [
+        0.0
+      ],
+      "workloads": "all_workloads"
+    },
+    "S2_temperature_interaction": {
+      "_purpose": "RL samples at T>0: does drift x temperature compound?",
+      "families": "ALL",
+      "methods": [
+        "ngram_sd",
+        "draft_sd",
+        "eagle3"
+      ],
+      "k": [
+        4
+      ],
+      "temperature": [
+        0.0,
+        0.3,
+        0.6,
+        1.0
+      ],
+      "workloads": "representative_workloads"
+    },
+    "S3_depth_interaction": {
+      "_purpose": "Does deeper speculation amplify staleness?",
+      "families": "ALL",
+      "methods": [
+        "ngram_sd",
+        "draft_sd",
+        "eagle3"
+      ],
+      "k": [
+        1,
+        2,
+        4,
+        8,
+        16
+      ],
+      "temperature": [
+        0.0
+      ],
+      "workloads": [
+        "long_chain_reasoning",
+        "code_gen"
+      ]
+    },
+    "S4_real_trajectory_focus": {
+      "_purpose": "Deep dive on the REAL Tulu path (the convincing axis).",
+      "families": [
+        "tulu_trajectory"
+      ],
+      "methods": [
+        "ngram_sd",
+        "draft_sd"
+      ],
+      "k": [
+        2,
+        4,
+        8
+      ],
+      "temperature": [
+        0.0,
+        0.6
+      ],
+      "workloads": "all_workloads"
+    }
+  }
+}

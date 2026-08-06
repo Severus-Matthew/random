@@ -1,0 +1,452 @@
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+import queue
+import time
+from dataclasses import asdict, dataclass
+from multiprocessing import Process, Queue
+from pathlib import Path
+from typing import Any
+
+import pandas as pd
+
+from apexp.week2.slow_router_inference import ArbitraryPromptSlowRouter
+
+
+METHODS = ["ngram_sd", "eagle3", "draft_sd"]
+
+
+def now():
+    return time.time()
+
+
+def sha1_text(x: str) -> str:
+    return hashlib.sha1(x.encode("utf-8", errors="ignore")).hexdigest()[:16]
+
+
+def infer_workload(path: str) -> str:
+    name = Path(path).name
+    if "mathematical_reasoning" in name:
+        return "mathematical_reasoning"
+    if "long_horizon_swe" in name:
+        return "long_horizon_swe"
+    if "long_context_completion" in name:
+        return "long_context_completion"
+    if "long_chain_reasoning" in name:
+        return "long_chain_reasoning"
+    if "conversational_generation_test_sft" in name:
+        return "conversational_generation_sft"
+    if "conversational_generation_test_gen" in name:
+        return "conversational_generation_gen"
+    if "code_gen" in name:
+        return "code_gen"
+    return Path(path).stem
+
+
+def workload_max_tokens(workload: str) -> int:
+    if workload in {"long_chain_reasoning", "long_horizon_swe"}:
+        return 1024
+    if workload == "long_context_completion":
+        return 2048
+    return 512
+
+
+def extract_prompt(obj: dict[str, Any]) -> str:
+    for k in ["prompt", "prompt_text", "input", "question", "text"]:
+        if k in obj and obj[k] is not None:
+            return str(obj[k])
+
+    if "messages" in obj and isinstance(obj["messages"], list):
+        parts = []
+        for m in obj["messages"]:
+            if isinstance(m, dict):
+                parts.append(f"{m.get('role','')}: {m.get('content','')}")
+            else:
+                parts.append(str(m))
+        return "\n".join(parts)
+
+    return json.dumps(obj, sort_keys=True)
+
+
+def parse_gpu_map(x: str) -> dict[str, str]:
+    out = {}
+    for part in x.split(","):
+        k, v = part.split(":")
+        out[k.strip()] = v.strip()
+    for m in METHODS:
+        if m not in out:
+            raise RuntimeError(f"Missing {m} in GPU map {x}")
+    return out
+
+
+@dataclass
+class Task:
+    task_id: str
+    pool: str
+    workload: str
+    source_file: str
+    source_index: int
+    global_index: int
+    prompt_hash: str
+    prompt: str
+    method: str
+    slow_k: int
+    temperature: float
+    max_tokens: int
+    router_score: float
+    router_source: str
+
+
+def build_speculative_config(method: str, max_k: int, args) -> dict | None:
+    if method == "ngram_sd":
+        return {
+            "method": "ngram",
+            "num_speculative_tokens": int(max_k),
+            "prompt_lookup_min": 1,
+            "prompt_lookup_max": 4,
+        }
+
+    if method == "draft_sd":
+        return {
+            "model": args.draft_model,
+            "num_speculative_tokens": int(max_k),
+        }
+
+    if method == "eagle3":
+        return {
+            "model": args.eagle3_model,
+            "method": "eagle",
+            "num_speculative_tokens": int(max_k),
+        }
+
+    raise RuntimeError(f"Unknown method: {method}")
+
+
+def worker_process(pool: str, method: str, gpu: str, q: Queue, ready_q: Queue, args):
+    os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu)
+    os.environ["PYTHONPATH"] = f"{Path.cwd() / 'src'}:{Path.cwd()}:{os.environ.get('PYTHONPATH','')}"
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"
+    os.environ["VLLM_WORKER_MULTIPROC_METHOD"] = "spawn"
+
+    # We use the online hook for both pools:
+    # slow_only => mode fixed, force active_k = slow_k
+    # slow_fast => mode dynamic, initial active_k = slow_k
+    os.environ["APEXP_ONLINE_FAST"] = "1"
+    os.environ["APEXP_BLOCK_TRACE"] = "1"
+    os.environ["APEXP_TRACE_STRICT"] = "0"
+    os.environ["APEXP_DEFAULT_K"] = str(args.max_engine_k)
+    os.environ["APEXP_INITIAL_K"] = str(args.max_engine_k)
+    os.environ["APEXP_MIN_K"] = str(args.fast_min_k)
+    os.environ["APEXP_MAX_K"] = str(args.max_engine_k)
+    os.environ["APEXP_FAST_CANDIDATE_KS"] = args.fast_candidate_ks
+    os.environ["APEXP_FAST_WINDOW"] = str(args.fast_window)
+    os.environ["APEXP_FAST_MIN_OBS"] = str(args.fast_min_obs)
+    os.environ["APEXP_FAST_DOWN_RATIO"] = str(args.fast_down_ratio)
+    os.environ["APEXP_FAST_UP_RATIO"] = str(args.fast_up_ratio)
+    os.environ["APEXP_FAST_UP_FULL_RATE"] = str(args.fast_up_full_rate)
+
+    worker_root = Path(args.out_dir) / pool / method / f"gpu{gpu}"
+    worker_root.mkdir(parents=True, exist_ok=True)
+
+    control_file = worker_root / "request_control.json"
+    os.environ["APEXP_REQUEST_CONTROL_FILE"] = str(control_file)
+    os.environ["APEXP_ONLINE_FAST_TRACE"] = str(worker_root / "online_fast_trace.jsonl")
+    os.environ["APEXP_TRACE_DIR"] = str(worker_root / "trace")
+    os.environ["APEXP_METHOD"] = method
+
+    # Import vLLM only after env and CUDA_VISIBLE_DEVICES are set.
+    from vllm import LLM, SamplingParams
+
+    spec_cfg = build_speculative_config(method, args.max_engine_k, args)
+
+    llm_kwargs = dict(
+        model=args.target_model,
+        speculative_config=spec_cfg,
+        trust_remote_code=True,
+        dtype=args.dtype,
+        enforce_eager=args.enforce_eager,
+    )
+
+    print(f"[worker loading] pool={pool} method={method} gpu={gpu} spec={spec_cfg}", flush=True)
+    llm = LLM(**llm_kwargs)
+    print(f"[worker ready] pool={pool} method={method} gpu={gpu}", flush=True)
+
+    ready_msg = {
+        "event": "worker_ready",
+        "time": now(),
+        "pool": pool,
+        "method": method,
+        "gpu": str(gpu),
+    }
+    ready_q.put(ready_msg)
+    write_jsonl(Path(args.out_dir) / "worker_events.jsonl", ready_msg)
+
+    results_dir = Path(args.out_dir) / "results"
+    results_dir.mkdir(parents=True, exist_ok=True)
+
+    while True:
+        task = q.get()
+        if task is None:
+            break
+
+        start_msg = {
+            "event": "task_start",
+            "time": now(),
+            "pool": pool,
+            "method": method,
+            "gpu": str(gpu),
+            "task_id": task.task_id,
+            "global_index": task.global_index,
+            "workload": task.workload,
+            "slow_k": int(task.slow_k),
+        }
+        write_jsonl(Path(args.out_dir) / "worker_events.jsonl", start_msg)
+
+        run_root = Path(args.out_dir) / pool / method / task.task_id
+        trace_dir = run_root / "trace"
+        trace_dir.mkdir(parents=True, exist_ok=True)
+
+        mode = "fixed" if pool == "slow_only" else "dynamic"
+        force_k = task.slow_k if pool == "slow_only" else None
+
+        control = {
+            "control_id": task.task_id,
+            "task_id": task.task_id,
+            "mode": mode,
+            "method": method,
+            "default_k": int(task.slow_k if pool == "slow_only" else args.max_engine_k),
+            "slow_k": int(task.slow_k),
+            "initial_k": int(task.slow_k),
+            "force_k": force_k,
+            "max_k": int(args.max_engine_k),
+            "min_k": int(args.fast_min_k),
+            "candidate_ks": [int(x) for x in args.fast_candidate_ks.split(",") if x.strip()],
+        }
+        control_file.write_text(json.dumps(control, sort_keys=True))
+
+        # Make block logger write under this request.
+        os.environ["APEXP_TRACE_DIR"] = str(trace_dir)
+        os.environ["APEXP_RUN_ID"] = task.task_id
+        os.environ["APEXP_WORKLOAD"] = task.workload
+        os.environ["APEXP_METHOD"] = method
+        os.environ["APEXP_K"] = str(args.max_engine_k)
+        os.environ["APEXP_TEMPERATURE"] = str(task.temperature)
+        os.environ["APEXP_SEED"] = str(args.seed)
+
+        sampling = SamplingParams(
+            temperature=float(task.temperature),
+            max_tokens=int(task.max_tokens),
+            seed=int(args.seed),
+        )
+
+        t0 = now()
+        status = "SUCCESS"
+        err = ""
+        output_text = ""
+        output_tokens = None
+
+        try:
+            outs = llm.generate([task.prompt], sampling_params=sampling)
+            out0 = outs[0]
+            if out0.outputs:
+                output_text = out0.outputs[0].text
+                # token_ids may not always exist depending on vLLM object version.
+                if hasattr(out0.outputs[0], "token_ids"):
+                    output_tokens = len(out0.outputs[0].token_ids)
+        except Exception as e:
+            status = "FAILED"
+            err = repr(e)
+
+        t1 = now()
+        wall_s = t1 - t0
+        tps = float(output_tokens / wall_s) if output_tokens is not None and wall_s > 0 else None
+
+        result = {
+            **asdict(task),
+            "status": status,
+            "error": err,
+            "gpu": gpu,
+            "mode": mode,
+            "engine_k": int(args.max_engine_k),
+            "active_initial_k": int(task.slow_k),
+            "wall_s": wall_s,
+            "output_tokens": output_tokens,
+            "tokens_per_sec": tps,
+            "trace_dir": str(trace_dir),
+            "control_file": str(control_file),
+            "output_preview": output_text[:500],
+        }
+
+        (results_dir / f"{pool}_{task.task_id}.json").write_text(
+            json.dumps(result, indent=2, sort_keys=True)
+        )
+
+        end_msg = {
+            "event": "task_end",
+            "time": now(),
+            "pool": pool,
+            "method": method,
+            "gpu": str(gpu),
+            "task_id": task.task_id,
+            "global_index": task.global_index,
+            "workload": task.workload,
+            "slow_k": int(task.slow_k),
+            "status": status,
+            "tokens_per_sec": tps,
+            "wall_s": wall_s,
+        }
+        write_jsonl(Path(args.out_dir) / "worker_events.jsonl", end_msg)
+
+    print(f"[worker done] pool={pool} method={method} gpu={gpu}", flush=True)
+
+
+def write_jsonl(path: Path, obj: dict):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a") as f:
+        f.write(json.dumps(obj, sort_keys=True) + "\n")
+
+
+def main():
+    ap = argparse.ArgumentParser()
+
+    ap.add_argument("--slow-router-dir", required=True)
+    ap.add_argument("--out-dir", required=True)
+    ap.add_argument("--input-jsonl", nargs="+", required=True)
+    ap.add_argument("--max-prompts-per-file", type=int, default=0)
+
+    ap.add_argument("--slow-gpus", default="ngram_sd:0,eagle3:1,draft_sd:2")
+    ap.add_argument("--fast-gpus", default="ngram_sd:3,eagle3:4,draft_sd:5")
+
+    ap.add_argument("--target-model", default="Qwen/Qwen3-8B")
+    ap.add_argument("--draft-model", default="Qwen/Qwen2.5-1.5B-Instruct")
+    ap.add_argument("--eagle3-model", default="RedHatAI/Qwen3-8B-speculator.eagle3")
+    ap.add_argument("--max-engine-k", type=int, default=16)
+    ap.add_argument("--dtype", default="bfloat16")
+    ap.add_argument("--enforce-eager", action="store_true")
+
+    ap.add_argument("--seed", type=int, default=42)
+    ap.add_argument("--fast-min-k", type=int, default=1)
+    ap.add_argument("--fast-candidate-ks", default="1,2,4,8,16")
+    ap.add_argument("--fast-window", type=int, default=4)
+    ap.add_argument("--fast-min-obs", type=int, default=4)
+    ap.add_argument("--fast-down-ratio", type=float, default=0.45)
+    ap.add_argument("--fast-up-ratio", type=float, default=0.85)
+    ap.add_argument("--fast-up-full-rate", type=float, default=0.75)
+
+    args = ap.parse_args()
+
+    out_dir = Path(args.out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    router = ArbitraryPromptSlowRouter(args.slow_router_dir)
+    slow_gpus = parse_gpu_map(args.slow_gpus)
+    fast_gpus = parse_gpu_map(args.fast_gpus)
+
+    queues = {}
+    procs = []
+    ready_q = Queue()
+
+    for pool, gpu_map in [("slow_only", slow_gpus), ("slow_fast", fast_gpus)]:
+        for method in METHODS:
+            q = Queue()
+            queues[(pool, method)] = q
+            p = Process(target=worker_process, args=(pool, method, gpu_map[method], q, ready_q, args))
+            p.start()
+            procs.append(p)
+
+    # Wait until all persistent engines are loaded before dispatching prompts.
+    expected_ready = len(procs)
+    ready_seen = []
+    print(f"[main] waiting for {expected_ready} workers to become ready", flush=True)
+
+    while len(ready_seen) < expected_ready:
+        try:
+            msg = ready_q.get(timeout=1800)
+        except queue.Empty:
+            raise RuntimeError(
+                f"Timed out waiting for workers. Ready so far: {ready_seen}"
+            )
+        ready_seen.append(msg)
+        print(
+            f"[main] ready {len(ready_seen)}/{expected_ready}: "
+            f"{msg.get('pool')} {msg.get('method')} gpu={msg.get('gpu')}",
+            flush=True,
+        )
+
+    write_jsonl(out_dir / "worker_events.jsonl", {
+        "event": "all_workers_ready",
+        "time": now(),
+        "n_ready": len(ready_seen),
+    })
+    print("[main] all workers ready; starting prompt dispatch", flush=True)
+
+    dispatch_log = out_dir / "dispatch_log.jsonl"
+    global_i = 0
+
+    for input_path in args.input_jsonl:
+        workload = infer_workload(input_path)
+        count = 0
+
+        with open(input_path) as f:
+            for local_i, line in enumerate(f):
+                if args.max_prompts_per_file and count >= args.max_prompts_per_file:
+                    break
+
+                obj = json.loads(line)
+                prompt = extract_prompt(obj)
+                ph = sha1_text(prompt)
+                action = router.choose(prompt, workload=workload, exact_ok=False)
+
+                event = {
+                    "event": "slow_router_decision",
+                    "time": now(),
+                    "global_index": global_i,
+                    "source_file": input_path,
+                    "source_index": local_i,
+                    "workload": workload,
+                    "prompt_hash": ph,
+                    "method": action.method,
+                    "slow_k": action.k,
+                    "temperature": action.temperature,
+                    "router_score": action.score,
+                    "router_source": action.source,
+                }
+                write_jsonl(dispatch_log, event)
+
+                for pool in ["slow_only", "slow_fast"]:
+                    task = Task(
+                        task_id=f"p{global_i:06d}_{workload}_{ph}",
+                        pool=pool,
+                        workload=workload,
+                        source_file=input_path,
+                        source_index=local_i,
+                        global_index=global_i,
+                        prompt_hash=ph,
+                        prompt=prompt,
+                        method=action.method,
+                        slow_k=int(action.k),
+                        temperature=float(action.temperature),
+                        max_tokens=workload_max_tokens(workload),
+                        router_score=float(action.score),
+                        router_source=action.source,
+                    )
+                    queues[(pool, action.method)].put(task)
+
+                global_i += 1
+                count += 1
+
+    for q in queues.values():
+        q.put(None)
+
+    for p in procs:
+        p.join()
+
+    print(f"[done] dispatched prompts: {global_i}")
+    print(f"[done] out_dir: {out_dir}")
+
+
+if __name__ == "__main__":
+    main()

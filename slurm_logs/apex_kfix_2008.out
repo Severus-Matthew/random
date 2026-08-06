@@ -1,0 +1,801 @@
+=== APEX HOT ABLATION ===
+CONFIG_NAME=cap50_w2_allk_1to16_KFIX
+OUT_DIR=results/apexp_block/config_large_500/week2/realtime_hot_e2e_cap50_w2_allk_1to16_KFIX_tracefix
+APEXP_FAST_WINDOW=2
+APEXP_FAST_MIN_OBS=2
+APEXP_MIN_K=1
+APEXP_MAX_K=16
+APEXP_FAST_CANDIDATE_KS=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16
+MAX_PROMPTS_PER_FILE=50
+
+=== GPU state before launch ===
+Mon Jul 20 20:03:06 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 580.159.04             Driver Version: 580.159.04     CUDA Version: 13.0     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA H200                    On  |   00000000:59:00.0 Off |                    0 |
+| N/A   80C    P0            608W /  700W |   82374MiB / 143771MiB |     97%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA H200                    On  |   00000000:5A:00.0 Off |                    0 |
+| N/A   70C    P0            588W /  700W |   93244MiB / 143771MiB |     97%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA H200                    On  |   00000000:72:00.0 Off |                    0 |
+| N/A   77C    P0            623W /  700W |   77903MiB / 143771MiB |     96%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA H200                    On  |   00000000:73:00.0 Off |                    0 |
+| N/A   69C    P0            583W /  700W |   80321MiB / 143771MiB |     99%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   4  NVIDIA H200                    On  |   00000000:8B:00.0 Off |                    0 |
+| N/A   76C    P0            638W /  700W |   77029MiB / 143771MiB |     96%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   5  NVIDIA H200                    On  |   00000000:8C:00.0 Off |                    0 |
+| N/A   69C    P0            614W /  700W |   77061MiB / 143771MiB |     97%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   6  NVIDIA H200                    On  |   00000000:A4:00.0 Off |                    0 |
+| N/A   79C    P0            663W /  700W |   77107MiB / 143771MiB |     97%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   7  NVIDIA H200                    On  |   00000000:A5:00.0 Off |                    0 |
+| N/A   69C    P0            628W /  700W |   76863MiB / 143771MiB |     98%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A         1469450      C   sglang::scheduler_TP0                  2980MiB |
+|    0   N/A  N/A         1469453      C   sglang::scheduler_TP0                  1516MiB |
+|    0   N/A  N/A         1469456      C   sglang::scheduler_TP0                  1516MiB |
+|    0   N/A  N/A         1469459      C   sglang::scheduler_TP0                  1516MiB |
+|    0   N/A  N/A         1474490      C   ray::MegatronTrainRayActor.train      74744MiB |
+|    1   N/A  N/A         1469451      C   sglang::scheduler_TP1                  2980MiB |
+|    1   N/A  N/A         1469454      C   sglang::scheduler_TP1                  1516MiB |
+|    1   N/A  N/A         1469457      C   sglang::scheduler_TP1                  1516MiB |
+|    1   N/A  N/A         1469460      C   sglang::scheduler_TP1                  1516MiB |
+|    1   N/A  N/A         1474489      C   ray::MegatronTrainRayActor.train      85610MiB |
+|    2   N/A  N/A         1469453      C   sglang::scheduler_TP0                  2976MiB |
+|    2   N/A  N/A         1474491      C   ray::MegatronTrainRayActor.train      74848MiB |
+|    3   N/A  N/A         1469454      C   sglang::scheduler_TP1                  2982MiB |
+|    3   N/A  N/A         1474492      C   ray::MegatronTrainRayActor.train      77256MiB |
+|    4   N/A  N/A         1469456      C   sglang::scheduler_TP0                  2964MiB |
+|    4   N/A  N/A         1474493      C   ray::MegatronTrainRayActor.train      73984MiB |
+|    5   N/A  N/A         1469457      C   sglang::scheduler_TP1                  2950MiB |
+|    5   N/A  N/A         1474495      C   ray::MegatronTrainRayActor.train      74032MiB |
+|    6   N/A  N/A         1469459      C   sglang::scheduler_TP0                  2974MiB |
+|    6   N/A  N/A         1474494      C   ray::MegatronTrainRayActor.train      74052MiB |
+|    7   N/A  N/A         1469460      C   sglang::scheduler_TP1                  2980MiB |
+|    7   N/A  N/A         1474496      C   ray::MegatronTrainRayActor.train      73804MiB |
++-----------------------------------------------------------------------------------------+
+
+=== Checking patched file ===
+21:def parse_fast_candidate_ks(raw=None, min_k=1, max_k=16):
+174:    os.environ["APEXP_FAST_CANDIDATE_KS"] = ",".join(str(x) for x in args.fast_candidate_ks_list)
+268:            "candidate_ks": args.fast_candidate_ks_list,
+382:    args.fast_candidate_ks_list = parse_fast_candidate_ks(
+383:        args.fast_candidate_ks,
+388:    args.fast_candidate_ks = ",".join(str(x) for x in args.fast_candidate_ks_list)
+389:    os.environ["APEXP_FAST_CANDIDATE_KS"] = args.fast_candidate_ks
+[slow-router] feature columns: 161
+[slow-router] candidate actions: 15
+[slow-router] exact prompt actions: 629
+[main] waiting for 6 workers to become ready
+[worker loading] pool=slow_only method=ngram_sd gpu=0 spec={'method': 'ngram', 'num_speculative_tokens': 16, 'prompt_lookup_min': 1, 'prompt_lookup_max': 4}
+[worker loading] pool=slow_fast method=draft_sd gpu=5 spec={'model': 'Qwen/Qwen2.5-1.5B-Instruct', 'num_speculative_tokens': 16}
+[worker loading] pool=slow_fast method=eagle3 gpu=4 spec={'model': 'RedHatAI/Qwen3-8B-speculator.eagle3', 'method': 'eagle', 'num_speculative_tokens': 16}
+[worker loading] pool=slow_only method=eagle3 gpu=1 spec={'model': 'RedHatAI/Qwen3-8B-speculator.eagle3', 'method': 'eagle', 'num_speculative_tokens': 16}
+[worker loading] pool=slow_fast method=ngram_sd gpu=3 spec={'method': 'ngram', 'num_speculative_tokens': 16, 'prompt_lookup_min': 1, 'prompt_lookup_max': 4}
+[worker loading] pool=slow_only method=draft_sd gpu=2 spec={'model': 'Qwen/Qwen2.5-1.5B-Instruct', 'num_speculative_tokens': 16}
+INFO 07-20 20:05:21 [utils.py:240] non-default args: {'trust_remote_code': True, 'dtype': 'bfloat16', 'disable_log_stats': True, 'speculative_config': {'model': 'Qwen/Qwen2.5-1.5B-Instruct', 'num_speculative_tokens': 16}, 'model': 'Qwen/Qwen3-8B'}
+INFO 07-20 20:05:21 [utils.py:240] non-default args: {'trust_remote_code': True, 'dtype': 'bfloat16', 'disable_log_stats': True, 'speculative_config': {'model': 'RedHatAI/Qwen3-8B-speculator.eagle3', 'method': 'eagle', 'num_speculative_tokens': 16}, 'model': 'Qwen/Qwen3-8B'}
+INFO 07-20 20:05:21 [utils.py:240] non-default args: {'trust_remote_code': True, 'dtype': 'bfloat16', 'disable_log_stats': True, 'speculative_config': {'model': 'Qwen/Qwen2.5-1.5B-Instruct', 'num_speculative_tokens': 16}, 'model': 'Qwen/Qwen3-8B'}
+INFO 07-20 20:05:21 [utils.py:240] non-default args: {'trust_remote_code': True, 'dtype': 'bfloat16', 'disable_log_stats': True, 'speculative_config': {'model': 'RedHatAI/Qwen3-8B-speculator.eagle3', 'method': 'eagle', 'num_speculative_tokens': 16}, 'model': 'Qwen/Qwen3-8B'}
+INFO 07-20 20:05:21 [utils.py:240] non-default args: {'trust_remote_code': True, 'dtype': 'bfloat16', 'disable_log_stats': True, 'speculative_config': {'method': 'ngram', 'num_speculative_tokens': 16, 'prompt_lookup_min': 1, 'prompt_lookup_max': 4}, 'model': 'Qwen/Qwen3-8B'}
+INFO 07-20 20:05:21 [utils.py:240] non-default args: {'trust_remote_code': True, 'dtype': 'bfloat16', 'disable_log_stats': True, 'speculative_config': {'method': 'ngram', 'num_speculative_tokens': 16, 'prompt_lookup_min': 1, 'prompt_lookup_max': 4}, 'model': 'Qwen/Qwen3-8B'}
+INFO 07-20 20:05:23 [model.py:568] Resolved architecture: Qwen3ForCausalLM
+INFO 07-20 20:05:23 [model.py:568] Resolved architecture: Qwen3ForCausalLM
+INFO 07-20 20:05:23 [model.py:1697] Using max model len 40960
+INFO 07-20 20:05:23 [model.py:1697] Using max model len 40960
+INFO 07-20 20:05:23 [model.py:568] Resolved architecture: Qwen3ForCausalLM
+INFO 07-20 20:05:23 [model.py:1697] Using max model len 40960
+INFO 07-20 20:05:23 [model.py:568] Resolved architecture: Qwen3ForCausalLM
+INFO 07-20 20:05:23 [model.py:1697] Using max model len 40960
+INFO 07-20 20:05:23 [model.py:568] Resolved architecture: Qwen3ForCausalLM
+INFO 07-20 20:05:23 [model.py:1697] Using max model len 40960
+INFO 07-20 20:05:23 [model.py:568] Resolved architecture: Qwen3ForCausalLM
+INFO 07-20 20:05:23 [model.py:1697] Using max model len 40960
+INFO 07-20 20:05:25 [scheduler.py:239] Chunked prefill is enabled with max_num_batched_tokens=16384.
+INFO 07-20 20:05:25 [scheduler.py:239] Chunked prefill is enabled with max_num_batched_tokens=16384.
+WARNING 07-20 20:05:25 [vllm.py:861] Async scheduling not supported with ngram-based speculative decoding and will be disabled.
+INFO 07-20 20:05:25 [vllm.py:886] Asynchronous scheduling is disabled.
+WARNING 07-20 20:05:25 [vllm.py:861] Async scheduling not supported with ngram-based speculative decoding and will be disabled.
+INFO 07-20 20:05:25 [vllm.py:886] Asynchronous scheduling is disabled.
+INFO 07-20 20:05:25 [kernel.py:212] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+INFO 07-20 20:05:25 [kernel.py:212] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+INFO 07-20 20:05:26 [model.py:568] Resolved architecture: Qwen2ForCausalLM
+INFO 07-20 20:05:26 [model.py:1697] Using max model len 32768
+INFO 07-20 20:05:26 [scheduler.py:239] Chunked prefill is enabled with max_num_batched_tokens=16384.
+INFO 07-20 20:05:26 [model.py:568] Resolved architecture: Qwen2ForCausalLM
+INFO 07-20 20:05:26 [model.py:1697] Using max model len 32768
+INFO 07-20 20:05:26 [scheduler.py:239] Chunked prefill is enabled with max_num_batched_tokens=16384.
+WARNING 07-20 20:05:26 [vllm.py:861] Async scheduling not supported with draft_model-based speculative decoding and will be disabled.
+INFO 07-20 20:05:26 [vllm.py:886] Asynchronous scheduling is disabled.
+INFO 07-20 20:05:26 [kernel.py:212] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+WARNING 07-20 20:05:26 [vllm.py:861] Async scheduling not supported with draft_model-based speculative decoding and will be disabled.
+INFO 07-20 20:05:26 [vllm.py:886] Asynchronous scheduling is disabled.
+INFO 07-20 20:05:26 [kernel.py:212] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+INFO 07-20 20:05:26 [model.py:568] Resolved architecture: Eagle3LlamaForCausalLM
+INFO 07-20 20:05:26 [model.py:1697] Using max model len 40960
+INFO 07-20 20:05:26 [model.py:568] Resolved architecture: Eagle3LlamaForCausalLM
+INFO 07-20 20:05:26 [model.py:1697] Using max model len 40960
+INFO 07-20 20:05:26 [scheduler.py:239] Chunked prefill is enabled with max_num_batched_tokens=16384.
+INFO 07-20 20:05:26 [scheduler.py:239] Chunked prefill is enabled with max_num_batched_tokens=16384.
+INFO 07-20 20:05:26 [vllm.py:886] Asynchronous scheduling is enabled.
+INFO 07-20 20:05:26 [kernel.py:212] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+INFO 07-20 20:05:26 [vllm.py:886] Asynchronous scheduling is enabled.
+INFO 07-20 20:05:26 [kernel.py:212] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native'])
+(EngineCore pid=2099065) INFO 07-20 20:05:53 [core.py:109] Initializing a V1 LLM engine (v0.21.0) with config: model='Qwen/Qwen3-8B', speculative_config=SpeculativeConfig(method='draft_model', model='Qwen/Qwen2.5-1.5B-Instruct', num_spec_tokens=16), tokenizer='Qwen/Qwen3-8B', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=True, dtype=torch.bfloat16, max_seq_len=40960, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=Qwen/Qwen3-8B, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [16384], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'size_asserts': False, 'alignment_asserts': False, 'scalar_asserts': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=False, moe_backend='auto')
+(EngineCore pid=2099081) INFO 07-20 20:05:53 [core.py:109] Initializing a V1 LLM engine (v0.21.0) with config: model='Qwen/Qwen3-8B', speculative_config=SpeculativeConfig(method='eagle', model='RedHatAI/Qwen3-8B-speculator.eagle3', num_spec_tokens=16), tokenizer='Qwen/Qwen3-8B', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=True, dtype=torch.bfloat16, max_seq_len=40960, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=Qwen/Qwen3-8B, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [16384], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'size_asserts': False, 'alignment_asserts': False, 'scalar_asserts': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=False, moe_backend='auto')
+(EngineCore pid=2099074) INFO 07-20 20:05:53 [core.py:109] Initializing a V1 LLM engine (v0.21.0) with config: model='Qwen/Qwen3-8B', speculative_config=SpeculativeConfig(method='eagle', model='RedHatAI/Qwen3-8B-speculator.eagle3', num_spec_tokens=16), tokenizer='Qwen/Qwen3-8B', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=True, dtype=torch.bfloat16, max_seq_len=40960, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=Qwen/Qwen3-8B, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [16384], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'size_asserts': False, 'alignment_asserts': False, 'scalar_asserts': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=False, moe_backend='auto')
+(EngineCore pid=2098859) INFO 07-20 20:05:53 [core.py:109] Initializing a V1 LLM engine (v0.21.0) with config: model='Qwen/Qwen3-8B', speculative_config=SpeculativeConfig(method='ngram', model=None, num_spec_tokens=16), tokenizer='Qwen/Qwen3-8B', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=True, dtype=torch.bfloat16, max_seq_len=40960, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=Qwen/Qwen3-8B, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [16384], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'size_asserts': False, 'alignment_asserts': False, 'scalar_asserts': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=False, moe_backend='auto')
+(EngineCore pid=2098861) INFO 07-20 20:05:53 [core.py:109] Initializing a V1 LLM engine (v0.21.0) with config: model='Qwen/Qwen3-8B', speculative_config=SpeculativeConfig(method='ngram', model=None, num_spec_tokens=16), tokenizer='Qwen/Qwen3-8B', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=True, dtype=torch.bfloat16, max_seq_len=40960, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=Qwen/Qwen3-8B, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [16384], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'size_asserts': False, 'alignment_asserts': False, 'scalar_asserts': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=False, moe_backend='auto')
+(EngineCore pid=2098994) INFO 07-20 20:05:53 [core.py:109] Initializing a V1 LLM engine (v0.21.0) with config: model='Qwen/Qwen3-8B', speculative_config=SpeculativeConfig(method='draft_model', model='Qwen/Qwen2.5-1.5B-Instruct', num_spec_tokens=16), tokenizer='Qwen/Qwen3-8B', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=True, dtype=torch.bfloat16, max_seq_len=40960, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=Qwen/Qwen3-8B, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'ir_enable_torch_wrap': True, 'splitting_ops': ['vllm::unified_attention_with_output', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::gdn_attention_core', 'vllm::gdn_attention_core_xpu', 'vllm::olmo_hybrid_gdn_full_forward', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::deepseek_v4_attention', 'vllm::unified_kv_cache_update', 'vllm::unified_mla_kv_cache_update'], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [16384], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'size_asserts': False, 'alignment_asserts': False, 'scalar_asserts': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'fuse_act_padding': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['native'], fused_add_rms_norm=['native']), enable_flashinfer_autotune=False, moe_backend='auto')
+(EngineCore pid=2099074) INFO 07-20 20:06:01 [parallel_state.py:1410] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://10.4.232.99:38129 backend=nccl
+(EngineCore pid=2098994) INFO 07-20 20:06:01 [parallel_state.py:1410] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://10.4.232.99:46329 backend=nccl
+(EngineCore pid=2098861) INFO 07-20 20:06:01 [parallel_state.py:1410] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://10.4.232.99:50151 backend=nccl
+(EngineCore pid=2099065) INFO 07-20 20:06:01 [parallel_state.py:1410] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://10.4.232.99:45091 backend=nccl
+(EngineCore pid=2098859) INFO 07-20 20:06:01 [parallel_state.py:1410] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://10.4.232.99:46351 backend=nccl
+(EngineCore pid=2099081) INFO 07-20 20:06:01 [parallel_state.py:1410] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://10.4.232.99:59501 backend=nccl
+(EngineCore pid=2098859) (EngineCore pid=2099081) (EngineCore pid=2099074) INFO 07-20 20:06:01 [parallel_state.py:1723] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+INFO 07-20 20:06:01 [parallel_state.py:1723] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+(EngineCore pid=2098861) INFO 07-20 20:06:01 [parallel_state.py:1723] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+INFO 07-20 20:06:01 [parallel_state.py:1723] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+(EngineCore pid=2098994) INFO 07-20 20:06:01 [parallel_state.py:1723] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+(EngineCore pid=2099065) INFO 07-20 20:06:01 [parallel_state.py:1723] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140] EngineCore failed to start.
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140] Traceback (most recent call last):
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 1114, in run_engine_core
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]     return func(*args, **kwargs)
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 880, in __init__
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]     super().__init__(
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 118, in __init__
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]     self.model_executor = executor_class(vllm_config)
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]     return func(*args, **kwargs)
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/executor/abstract.py", line 109, in __init__
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]     self._init_executor()
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/executor/uniproc_executor.py", line 60, in _init_executor
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]     self.driver_worker.init_device()
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/worker_base.py", line 317, in init_device
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]     self.worker.init_device()  # type: ignore
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]     ^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]     return func(*args, **kwargs)
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/gpu_worker.py", line 303, in init_device
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]     self.requested_memory = request_memory(init_snapshot, self.cache_config)
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/utils.py", line 413, in request_memory
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140]     raise ValueError(
+(EngineCore pid=2099081) ERROR 07-20 20:06:03 [core.py:1140] ValueError: Free memory on device cuda:0 (64.07/139.8 GiB) on startup is less than desired GPU memory utilization (0.92, 128.62 GiB). Decrease GPU memory utilization or reduce GPU memory used by other processes.
+(EngineCore pid=2099081) Process EngineCore:
+(EngineCore pid=2099081) Traceback (most recent call last):
+(EngineCore pid=2099081)   File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+(EngineCore pid=2099081)     self.run()
+(EngineCore pid=2099081)   File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 108, in run
+(EngineCore pid=2099081)     self._target(*self._args, **self._kwargs)
+(EngineCore pid=2099081)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 1144, in run_engine_core
+(EngineCore pid=2099081)     raise e
+(EngineCore pid=2099081)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 1114, in run_engine_core
+(EngineCore pid=2099081)     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+(EngineCore pid=2099081)                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099081)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2099081)     return func(*args, **kwargs)
+(EngineCore pid=2099081)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099081)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 880, in __init__
+(EngineCore pid=2099081)     super().__init__(
+(EngineCore pid=2099081)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 118, in __init__
+(EngineCore pid=2099081)     self.model_executor = executor_class(vllm_config)
+(EngineCore pid=2099081)                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099081)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2099081)     return func(*args, **kwargs)
+(EngineCore pid=2099081)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099081)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/executor/abstract.py", line 109, in __init__
+(EngineCore pid=2099081)     self._init_executor()
+(EngineCore pid=2099081)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/executor/uniproc_executor.py", line 60, in _init_executor
+(EngineCore pid=2099081)     self.driver_worker.init_device()
+(EngineCore pid=2099081)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/worker_base.py", line 317, in init_device
+(EngineCore pid=2099081)     self.worker.init_device()  # type: ignore
+(EngineCore pid=2099081)     ^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099081)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2099081)     return func(*args, **kwargs)
+(EngineCore pid=2099081)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099081)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/gpu_worker.py", line 303, in init_device
+(EngineCore pid=2099081)     self.requested_memory = request_memory(init_snapshot, self.cache_config)
+(EngineCore pid=2099081)                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099081)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/utils.py", line 413, in request_memory
+(EngineCore pid=2099081)     raise ValueError(
+(EngineCore pid=2099081) ValueError: Free memory on device cuda:0 (64.07/139.8 GiB) on startup is less than desired GPU memory utilization (0.92, 128.62 GiB). Decrease GPU memory utilization or reduce GPU memory used by other processes.
+(EngineCore pid=2099065) (EngineCore pid=2098861) ERROR 07-20 20:06:03 [core.py:1140] EngineCore failed to start.
+ERROR 07-20 20:06:03 [core.py:1140] EngineCore failed to start.
+(EngineCore pid=2098861) (EngineCore pid=2099065) ERROR 07-20 20:06:03 [core.py:1140] Traceback (most recent call last):
+(EngineCore pid=2098861) ERROR 07-20 20:06:03 [core.py:1140] Traceback (most recent call last):
+ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 1114, in run_engine_core
+(EngineCore pid=2099065) (EngineCore pid=2098861) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 1114, in run_engine_core
+ERROR 07-20 20:06:03 [core.py:1140]     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+(EngineCore pid=2099065) (EngineCore pid=2098861) ERROR 07-20 20:06:03 [core.py:1140]     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+ERROR 07-20 20:06:03 [core.py:1140]                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099065) (EngineCore pid=2098861) ERROR 07-20 20:06:03 [core.py:1140]                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2099065) (EngineCore pid=2098861) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+ERROR 07-20 20:06:03 [core.py:1140]     return func(*args, **kwargs)
+(EngineCore pid=2099065) (EngineCore pid=2098861) ERROR 07-20 20:06:03 [core.py:1140]     return func(*args, **kwargs)
+ERROR 07-20 20:06:03 [core.py:1140]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099065) (EngineCore pid=2098861) ERROR 07-20 20:06:03 [core.py:1140]            ^^^^^^^^^^^^^^^^^^^^^
+ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 880, in __init__
+(EngineCore pid=2099065) (EngineCore pid=2098861) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 880, in __init__
+ERROR 07-20 20:06:03 [core.py:1140]     super().__init__(
+(EngineCore pid=2099065) (EngineCore pid=2098861) ERROR 07-20 20:06:03 [core.py:1140]     super().__init__(
+ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 118, in __init__
+(EngineCore pid=2099065) (EngineCore pid=2098861) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 118, in __init__
+ERROR 07-20 20:06:03 [core.py:1140]     self.model_executor = executor_class(vllm_config)
+(EngineCore pid=2099065) (EngineCore pid=2098861) ERROR 07-20 20:06:03 [core.py:1140]     self.model_executor = executor_class(vllm_config)
+ERROR 07-20 20:06:03 [core.py:1140]                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099065) (EngineCore pid=2098861) ERROR 07-20 20:06:03 [core.py:1140]                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2099065) (EngineCore pid=2098861) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+ERROR 07-20 20:06:03 [core.py:1140]     return func(*args, **kwargs)
+(EngineCore pid=2099065) (EngineCore pid=2098861) ERROR 07-20 20:06:03 [core.py:1140]     return func(*args, **kwargs)
+ERROR 07-20 20:06:03 [core.py:1140]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099065) (EngineCore pid=2098861) ERROR 07-20 20:06:03 [core.py:1140]            ^^^^^^^^^^^^^^^^^^^^^
+ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/executor/abstract.py", line 109, in __init__
+(EngineCore pid=2099065) (EngineCore pid=2098861) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/executor/abstract.py", line 109, in __init__
+ERROR 07-20 20:06:03 [core.py:1140]     self._init_executor()
+(EngineCore pid=2099065) (EngineCore pid=2098861) ERROR 07-20 20:06:03 [core.py:1140]     self._init_executor()
+ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/executor/uniproc_executor.py", line 60, in _init_executor
+(EngineCore pid=2099065) (EngineCore pid=2098861) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/executor/uniproc_executor.py", line 60, in _init_executor
+ERROR 07-20 20:06:03 [core.py:1140]     self.driver_worker.init_device()
+(EngineCore pid=2099065) (EngineCore pid=2098861) ERROR 07-20 20:06:03 [core.py:1140]     self.driver_worker.init_device()
+ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/worker_base.py", line 317, in init_device
+(EngineCore pid=2098861) (EngineCore pid=2099065) ERROR 07-20 20:06:03 [core.py:1140]     self.worker.init_device()  # type: ignore
+ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/worker_base.py", line 317, in init_device
+(EngineCore pid=2098861) (EngineCore pid=2099065) ERROR 07-20 20:06:03 [core.py:1140]     ^^^^^^^^^^^^^^^^^^^^^^^^^
+ERROR 07-20 20:06:03 [core.py:1140]     self.worker.init_device()  # type: ignore
+(EngineCore pid=2098861) (EngineCore pid=2099065) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+ERROR 07-20 20:06:03 [core.py:1140]     ^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098861) (EngineCore pid=2099065) ERROR 07-20 20:06:03 [core.py:1140]     return func(*args, **kwargs)
+ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2098861) (EngineCore pid=2099065) ERROR 07-20 20:06:03 [core.py:1140]            ^^^^^^^^^^^^^^^^^^^^^
+ERROR 07-20 20:06:03 [core.py:1140]     return func(*args, **kwargs)
+(EngineCore pid=2098861) (EngineCore pid=2099065) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/gpu_worker.py", line 303, in init_device
+ERROR 07-20 20:06:03 [core.py:1140]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098861) (EngineCore pid=2099065) ERROR 07-20 20:06:03 [core.py:1140]     self.requested_memory = request_memory(init_snapshot, self.cache_config)
+ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/gpu_worker.py", line 303, in init_device
+(EngineCore pid=2098861) (EngineCore pid=2099065) ERROR 07-20 20:06:03 [core.py:1140]                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ERROR 07-20 20:06:03 [core.py:1140]     self.requested_memory = request_memory(init_snapshot, self.cache_config)
+(EngineCore pid=2098861) (EngineCore pid=2099065) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/utils.py", line 413, in request_memory
+ERROR 07-20 20:06:03 [core.py:1140]                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098861) (EngineCore pid=2099065) ERROR 07-20 20:06:03 [core.py:1140]     raise ValueError(
+ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/utils.py", line 413, in request_memory
+(EngineCore pid=2098861) (EngineCore pid=2099065) ERROR 07-20 20:06:03 [core.py:1140] ValueError: Free memory on device cuda:0 (58.85/139.8 GiB) on startup is less than desired GPU memory utilization (0.92, 128.62 GiB). Decrease GPU memory utilization or reduce GPU memory used by other processes.
+ERROR 07-20 20:06:03 [core.py:1140]     raise ValueError(
+(EngineCore pid=2099065) ERROR 07-20 20:06:03 [core.py:1140] ValueError: Free memory on device cuda:0 (63.21/139.8 GiB) on startup is less than desired GPU memory utilization (0.92, 128.62 GiB). Decrease GPU memory utilization or reduce GPU memory used by other processes.
+(EngineCore pid=2098861) Process EngineCore:
+(EngineCore pid=2099065) Process EngineCore:
+(EngineCore pid=2098861) Traceback (most recent call last):
+(EngineCore pid=2099065) Traceback (most recent call last):
+(EngineCore pid=2098861)   File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+(EngineCore pid=2098861)     self.run()
+(EngineCore pid=2098861)   File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 108, in run
+(EngineCore pid=2098861)     self._target(*self._args, **self._kwargs)
+(EngineCore pid=2098861)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 1144, in run_engine_core
+(EngineCore pid=2098861)     raise e
+(EngineCore pid=2098861)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 1114, in run_engine_core
+(EngineCore pid=2098861)     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+(EngineCore pid=2098861)                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099065) (EngineCore pid=2098861)   File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+(EngineCore pid=2099065)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2098861)     self.run()
+    return func(*args, **kwargs)
+(EngineCore pid=2098861)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099065) (EngineCore pid=2098861)   File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 108, in run
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 880, in __init__
+(EngineCore pid=2099065) (EngineCore pid=2098861)     self._target(*self._args, **self._kwargs)
+    super().__init__(
+(EngineCore pid=2099065) (EngineCore pid=2098861)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 1144, in run_engine_core
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 118, in __init__
+(EngineCore pid=2099065) (EngineCore pid=2098861)     raise e
+    self.model_executor = executor_class(vllm_config)
+(EngineCore pid=2098861) (EngineCore pid=2099065)                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 1114, in run_engine_core
+(EngineCore pid=2099065)     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+(EngineCore pid=2098861) (EngineCore pid=2099065)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098861)     return func(*args, **kwargs)
+(EngineCore pid=2098861) (EngineCore pid=2099065)            ^^^^^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2099065)     return func(*args, **kwargs)
+(EngineCore pid=2098861) (EngineCore pid=2099065)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/executor/abstract.py", line 109, in __init__
+           ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098861)     self._init_executor()
+(EngineCore pid=2099065)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 880, in __init__
+(EngineCore pid=2098861) (EngineCore pid=2099065)     super().__init__(
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/executor/uniproc_executor.py", line 60, in _init_executor
+(EngineCore pid=2098861)     self.driver_worker.init_device()
+(EngineCore pid=2098859) (EngineCore pid=2099065) (EngineCore pid=2098861)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 118, in __init__
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/worker_base.py", line 317, in init_device
+(EngineCore pid=2099065) (EngineCore pid=2098861) ERROR 07-20 20:06:03 [core.py:1140] EngineCore failed to start.
+    self.worker.init_device()  # type: ignore
+    self.model_executor = executor_class(vllm_config)
+(EngineCore pid=2098861) (EngineCore pid=2099065)                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098859)     ^^^^^^^^^^^^^^^^^^^^^^^^^
+ERROR 07-20 20:06:03 [core.py:1140] Traceback (most recent call last):
+(EngineCore pid=2099065) (EngineCore pid=2098859) (EngineCore pid=2098861)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2099065)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+    return func(*args, **kwargs)
+ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 1114, in run_engine_core
+(EngineCore pid=2098861) (EngineCore pid=2099065) (EngineCore pid=2098859)     return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098861) ERROR 07-20 20:06:03 [core.py:1140]     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098859) (EngineCore pid=2099065) ERROR 07-20 20:06:03 [core.py:1140]                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/executor/abstract.py", line 109, in __init__
+(EngineCore pid=2098859) (EngineCore pid=2099065) (EngineCore pid=2098861) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+    self._init_executor()
+(EngineCore pid=2098859)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/gpu_worker.py", line 303, in init_device
+(EngineCore pid=2098861) ERROR 07-20 20:06:03 [core.py:1140]     return func(*args, **kwargs)
+(EngineCore pid=2099065) (EngineCore pid=2098859)     self.requested_memory = request_memory(init_snapshot, self.cache_config)
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/executor/uniproc_executor.py", line 60, in _init_executor
+(EngineCore pid=2099065) ERROR 07-20 20:06:03 [core.py:1140]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098861) (EngineCore pid=2098859)     self.driver_worker.init_device()
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 880, in __init__
+(EngineCore pid=2098859) (EngineCore pid=2098861) ERROR 07-20 20:06:03 [core.py:1140]     super().__init__(
+(EngineCore pid=2099065)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/utils.py", line 413, in request_memory
+(EngineCore pid=2098859) (EngineCore pid=2098861)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/worker_base.py", line 317, in init_device
+ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 118, in __init__
+    raise ValueError(
+(EngineCore pid=2099065) (EngineCore pid=2098859)     self.worker.init_device()  # type: ignore
+ERROR 07-20 20:06:03 [core.py:1140]     self.model_executor = executor_class(vllm_config)
+(EngineCore pid=2099065) (EngineCore pid=2098859)     ^^^^^^^^^^^^^^^^^^^^^^^^^
+ERROR 07-20 20:06:03 [core.py:1140]                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098859) (EngineCore pid=2098861) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2099065) ValueError: Free memory on device cuda:0 (58.85/139.8 GiB) on startup is less than desired GPU memory utilization (0.92, 128.62 GiB). Decrease GPU memory utilization or reduce GPU memory used by other processes.
+(EngineCore pid=2098859)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+ERROR 07-20 20:06:03 [core.py:1140]     return func(*args, **kwargs)
+(EngineCore pid=2099065) (EngineCore pid=2098859)     return func(*args, **kwargs)
+ERROR 07-20 20:06:03 [core.py:1140]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099065) (EngineCore pid=2098859)            ^^^^^^^^^^^^^^^^^^^^^
+ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/executor/abstract.py", line 109, in __init__
+(EngineCore pid=2098859) (EngineCore pid=2099065) ERROR 07-20 20:06:03 [core.py:1140]     self._init_executor()
+(EngineCore pid=2098859)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/gpu_worker.py", line 303, in init_device
+(EngineCore pid=2099065) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/executor/uniproc_executor.py", line 60, in _init_executor
+    self.requested_memory = request_memory(init_snapshot, self.cache_config)
+(EngineCore pid=2098859) (EngineCore pid=2099065) ERROR 07-20 20:06:03 [core.py:1140]     self.driver_worker.init_device()
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098859) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/worker_base.py", line 317, in init_device
+(EngineCore pid=2098859) (EngineCore pid=2099065) ERROR 07-20 20:06:03 [core.py:1140]     self.worker.init_device()  # type: ignore
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/utils.py", line 413, in request_memory
+(EngineCore pid=2098859) (EngineCore pid=2099065) ERROR 07-20 20:06:03 [core.py:1140]     ^^^^^^^^^^^^^^^^^^^^^^^^^
+    raise ValueError(
+(EngineCore pid=2098859) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2098859) ERROR 07-20 20:06:03 [core.py:1140]     return func(*args, **kwargs)
+(EngineCore pid=2098859) ERROR 07-20 20:06:03 [core.py:1140]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098859) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/gpu_worker.py", line 303, in init_device
+(EngineCore pid=2098859) ERROR 07-20 20:06:03 [core.py:1140]     self.requested_memory = request_memory(init_snapshot, self.cache_config)
+(EngineCore pid=2099065) (EngineCore pid=2098859) ValueError: Free memory on device cuda:0 (63.21/139.8 GiB) on startup is less than desired GPU memory utilization (0.92, 128.62 GiB). Decrease GPU memory utilization or reduce GPU memory used by other processes.
+ERROR 07-20 20:06:03 [core.py:1140]                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098859) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/utils.py", line 413, in request_memory
+(EngineCore pid=2098859) ERROR 07-20 20:06:03 [core.py:1140]     raise ValueError(
+(EngineCore pid=2098859) ERROR 07-20 20:06:03 [core.py:1140] ValueError: Free memory on device cuda:0 (60.85/139.8 GiB) on startup is less than desired GPU memory utilization (0.92, 128.62 GiB). Decrease GPU memory utilization or reduce GPU memory used by other processes.
+(EngineCore pid=2098859) Process EngineCore:
+(EngineCore pid=2098859) Traceback (most recent call last):
+(EngineCore pid=2098859)   File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+(EngineCore pid=2098859)     self.run()
+(EngineCore pid=2098859)   File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 108, in run
+(EngineCore pid=2098859)     self._target(*self._args, **self._kwargs)
+(EngineCore pid=2098859)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 1144, in run_engine_core
+(EngineCore pid=2098859)     raise e
+(EngineCore pid=2098859)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 1114, in run_engine_core
+(EngineCore pid=2098859)     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+(EngineCore pid=2098859)                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098859)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2098859)     return func(*args, **kwargs)
+(EngineCore pid=2098859)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098859)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 880, in __init__
+(EngineCore pid=2098859)     super().__init__(
+(EngineCore pid=2098859)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 118, in __init__
+(EngineCore pid=2098859)     self.model_executor = executor_class(vllm_config)
+(EngineCore pid=2098859)                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098859)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2098859)     return func(*args, **kwargs)
+(EngineCore pid=2098859)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098859)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/executor/abstract.py", line 109, in __init__
+(EngineCore pid=2098859)     self._init_executor()
+(EngineCore pid=2098859)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/executor/uniproc_executor.py", line 60, in _init_executor
+(EngineCore pid=2098859)     self.driver_worker.init_device()
+(EngineCore pid=2098859)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/worker_base.py", line 317, in init_device
+(EngineCore pid=2098859)     self.worker.init_device()  # type: ignore
+(EngineCore pid=2098859)     ^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098859)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2098859)     return func(*args, **kwargs)
+(EngineCore pid=2098859)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098859)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/gpu_worker.py", line 303, in init_device
+(EngineCore pid=2098859)     self.requested_memory = request_memory(init_snapshot, self.cache_config)
+(EngineCore pid=2098859)                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098859)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/utils.py", line 413, in request_memory
+(EngineCore pid=2098859)     raise ValueError(
+(EngineCore pid=2098859) ValueError: Free memory on device cuda:0 (60.85/139.8 GiB) on startup is less than desired GPU memory utilization (0.92, 128.62 GiB). Decrease GPU memory utilization or reduce GPU memory used by other processes.
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140] EngineCore failed to start.
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140] Traceback (most recent call last):
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 1114, in run_engine_core
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]     return func(*args, **kwargs)
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 880, in __init__
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]     super().__init__(
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 118, in __init__
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]     self.model_executor = executor_class(vllm_config)
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]     return func(*args, **kwargs)
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/executor/abstract.py", line 109, in __init__
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]     self._init_executor()
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/executor/uniproc_executor.py", line 60, in _init_executor
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]     self.driver_worker.init_device()
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/worker_base.py", line 317, in init_device
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]     self.worker.init_device()  # type: ignore
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]     ^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]     return func(*args, **kwargs)
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/gpu_worker.py", line 303, in init_device
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]     self.requested_memory = request_memory(init_snapshot, self.cache_config)
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/utils.py", line 413, in request_memory
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140]     raise ValueError(
+(EngineCore pid=2099074) ERROR 07-20 20:06:03 [core.py:1140] ValueError: Free memory on device cuda:0 (48.23/139.8 GiB) on startup is less than desired GPU memory utilization (0.92, 128.62 GiB). Decrease GPU memory utilization or reduce GPU memory used by other processes.
+(EngineCore pid=2099074) Process EngineCore:
+(EngineCore pid=2099074) Traceback (most recent call last):
+(EngineCore pid=2099074)   File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+(EngineCore pid=2099074)     self.run()
+(EngineCore pid=2099074)   File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 108, in run
+(EngineCore pid=2099074)     self._target(*self._args, **self._kwargs)
+(EngineCore pid=2099074)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 1144, in run_engine_core
+(EngineCore pid=2099074)     raise e
+(EngineCore pid=2099074)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 1114, in run_engine_core
+(EngineCore pid=2099074)     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+(EngineCore pid=2099074)                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099074)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2099074)     return func(*args, **kwargs)
+(EngineCore pid=2099074)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099074)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 880, in __init__
+(EngineCore pid=2099074)     super().__init__(
+(EngineCore pid=2099074)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 118, in __init__
+(EngineCore pid=2099074)     self.model_executor = executor_class(vllm_config)
+(EngineCore pid=2099074)                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099074)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2099074)     return func(*args, **kwargs)
+(EngineCore pid=2099074)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099074)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/executor/abstract.py", line 109, in __init__
+(EngineCore pid=2099074)     self._init_executor()
+(EngineCore pid=2099074)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/executor/uniproc_executor.py", line 60, in _init_executor
+(EngineCore pid=2099074)     self.driver_worker.init_device()
+(EngineCore pid=2099074)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/worker_base.py", line 317, in init_device
+(EngineCore pid=2099074)     self.worker.init_device()  # type: ignore
+(EngineCore pid=2099074)     ^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099074)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2099074)     return func(*args, **kwargs)
+(EngineCore pid=2099074)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099074)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/gpu_worker.py", line 303, in init_device
+(EngineCore pid=2099074)     self.requested_memory = request_memory(init_snapshot, self.cache_config)
+(EngineCore pid=2099074)                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2099074)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/utils.py", line 413, in request_memory
+(EngineCore pid=2099074)     raise ValueError(
+(EngineCore pid=2099074) ValueError: Free memory on device cuda:0 (48.23/139.8 GiB) on startup is less than desired GPU memory utilization (0.92, 128.62 GiB). Decrease GPU memory utilization or reduce GPU memory used by other processes.
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140] EngineCore failed to start.
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140] Traceback (most recent call last):
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 1114, in run_engine_core
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]     return func(*args, **kwargs)
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 880, in __init__
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]     super().__init__(
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 118, in __init__
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]     self.model_executor = executor_class(vllm_config)
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]     return func(*args, **kwargs)
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/executor/abstract.py", line 109, in __init__
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]     self._init_executor()
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/executor/uniproc_executor.py", line 60, in _init_executor
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]     self.driver_worker.init_device()
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/worker_base.py", line 317, in init_device
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]     self.worker.init_device()  # type: ignore
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]     ^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]     return func(*args, **kwargs)
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/gpu_worker.py", line 303, in init_device
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]     self.requested_memory = request_memory(init_snapshot, self.cache_config)
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/utils.py", line 413, in request_memory
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140]     raise ValueError(
+(EngineCore pid=2098994) ERROR 07-20 20:06:03 [core.py:1140] ValueError: Free memory on device cuda:0 (64.03/139.8 GiB) on startup is less than desired GPU memory utilization (0.92, 128.62 GiB). Decrease GPU memory utilization or reduce GPU memory used by other processes.
+(EngineCore pid=2098994) Process EngineCore:
+(EngineCore pid=2098994) Traceback (most recent call last):
+(EngineCore pid=2098994)   File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+(EngineCore pid=2098994)     self.run()
+(EngineCore pid=2098994)   File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 108, in run
+(EngineCore pid=2098994)     self._target(*self._args, **self._kwargs)
+(EngineCore pid=2098994)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 1144, in run_engine_core
+(EngineCore pid=2098994)     raise e
+(EngineCore pid=2098994)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 1114, in run_engine_core
+(EngineCore pid=2098994)     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
+(EngineCore pid=2098994)                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098994)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2098994)     return func(*args, **kwargs)
+(EngineCore pid=2098994)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098994)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 880, in __init__
+(EngineCore pid=2098994)     super().__init__(
+(EngineCore pid=2098994)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core.py", line 118, in __init__
+(EngineCore pid=2098994)     self.model_executor = executor_class(vllm_config)
+(EngineCore pid=2098994)                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098994)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2098994)     return func(*args, **kwargs)
+(EngineCore pid=2098994)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098994)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/executor/abstract.py", line 109, in __init__
+(EngineCore pid=2098994)     self._init_executor()
+(EngineCore pid=2098994)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/executor/uniproc_executor.py", line 60, in _init_executor
+(EngineCore pid=2098994)     self.driver_worker.init_device()
+(EngineCore pid=2098994)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/worker_base.py", line 317, in init_device
+(EngineCore pid=2098994)     self.worker.init_device()  # type: ignore
+(EngineCore pid=2098994)     ^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098994)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+(EngineCore pid=2098994)     return func(*args, **kwargs)
+(EngineCore pid=2098994)            ^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098994)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/gpu_worker.py", line 303, in init_device
+(EngineCore pid=2098994)     self.requested_memory = request_memory(init_snapshot, self.cache_config)
+(EngineCore pid=2098994)                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(EngineCore pid=2098994)   File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/worker/utils.py", line 413, in request_memory
+(EngineCore pid=2098994)     raise ValueError(
+(EngineCore pid=2098994) ValueError: Free memory on device cuda:0 (64.03/139.8 GiB) on startup is less than desired GPU memory utilization (0.92, 128.62 GiB). Decrease GPU memory utilization or reduce GPU memory used by other processes.
+[rank0]:[W720 20:06:04.537060523 ProcessGroupNCCL.cpp:1575] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[rank0]:[W720 20:06:04.693020829 ProcessGroupNCCL.cpp:1575] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[rank0]:[W720 20:06:04.709504119 ProcessGroupNCCL.cpp:1575] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[rank0]:[W720 20:06:04.710906220 ProcessGroupNCCL.cpp:1575] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[rank0]:[W720 20:06:04.716243707 ProcessGroupNCCL.cpp:1575] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[rank0]:[W720 20:06:04.717137417 ProcessGroupNCCL.cpp:1575] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+Process Process-5:
+Traceback (most recent call last):
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/fsx/jmanvi/Internship_project/ASD/src/apexp/week2/realtime_hot_e2e.py", line 204, in worker_process
+    llm = LLM(**llm_kwargs)
+          ^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 381, in __init__
+    self.llm_engine = LLMEngine.from_engine_args(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 170, in from_engine_args
+    return cls(
+           ^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 104, in __init__
+    self.engine_core = EngineCoreClient.make_client(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 101, in make_client
+    return SyncMPClient(vllm_config, executor_class, log_stats)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 723, in __init__
+    super().__init__(
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 535, in __init__
+    with launch_core_engines(
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 144, in __exit__
+    next(self.gen)
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/utils.py", line 1128, in launch_core_engines
+    wait_for_engine_startup(
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/utils.py", line 1187, in wait_for_engine_startup
+    raise RuntimeError(
+RuntimeError: Engine core initialization failed. See root cause above. Failed core proc(s): {}
+Process Process-6:
+Traceback (most recent call last):
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/fsx/jmanvi/Internship_project/ASD/src/apexp/week2/realtime_hot_e2e.py", line 204, in worker_process
+    llm = LLM(**llm_kwargs)
+          ^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 381, in __init__
+    self.llm_engine = LLMEngine.from_engine_args(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 170, in from_engine_args
+    return cls(
+           ^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 104, in __init__
+    self.engine_core = EngineCoreClient.make_client(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 101, in make_client
+    return SyncMPClient(vllm_config, executor_class, log_stats)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 723, in __init__
+    super().__init__(
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 535, in __init__
+    with launch_core_engines(
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 144, in __exit__
+    next(self.gen)
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/utils.py", line 1128, in launch_core_engines
+    wait_for_engine_startup(
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/utils.py", line 1187, in wait_for_engine_startup
+    raise RuntimeError(
+RuntimeError: Engine core initialization failed. See root cause above. Failed core proc(s): {}
+Process Process-4:
+Traceback (most recent call last):
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/fsx/jmanvi/Internship_project/ASD/src/apexp/week2/realtime_hot_e2e.py", line 204, in worker_process
+    llm = LLM(**llm_kwargs)
+          ^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 381, in __init__
+    self.llm_engine = LLMEngine.from_engine_args(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 170, in from_engine_args
+    return cls(
+           ^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 104, in __init__
+    self.engine_core = EngineCoreClient.make_client(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 101, in make_client
+    return SyncMPClient(vllm_config, executor_class, log_stats)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 723, in __init__
+    super().__init__(
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 535, in __init__
+    with launch_core_engines(
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 144, in __exit__
+    next(self.gen)
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/utils.py", line 1128, in launch_core_engines
+    wait_for_engine_startup(
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/utils.py", line 1187, in wait_for_engine_startup
+    raise RuntimeError(
+RuntimeError: Engine core initialization failed. See root cause above. Failed core proc(s): {}
+Process Process-2:
+Traceback (most recent call last):
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/fsx/jmanvi/Internship_project/ASD/src/apexp/week2/realtime_hot_e2e.py", line 204, in worker_process
+    llm = LLM(**llm_kwargs)
+          ^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 381, in __init__
+    self.llm_engine = LLMEngine.from_engine_args(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 170, in from_engine_args
+    return cls(
+           ^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 104, in __init__
+    self.engine_core = EngineCoreClient.make_client(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 101, in make_client
+    return SyncMPClient(vllm_config, executor_class, log_stats)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 723, in __init__
+    super().__init__(
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 535, in __init__
+    with launch_core_engines(
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 144, in __exit__
+    next(self.gen)
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/utils.py", line 1128, in launch_core_engines
+    wait_for_engine_startup(
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/utils.py", line 1187, in wait_for_engine_startup
+    raise RuntimeError(
+RuntimeError: Engine core initialization failed. See root cause above. Failed core proc(s): {}
+Process Process-3:
+Traceback (most recent call last):
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/fsx/jmanvi/Internship_project/ASD/src/apexp/week2/realtime_hot_e2e.py", line 204, in worker_process
+    llm = LLM(**llm_kwargs)
+          ^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 381, in __init__
+    self.llm_engine = LLMEngine.from_engine_args(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 170, in from_engine_args
+    return cls(
+           ^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 104, in __init__
+    self.engine_core = EngineCoreClient.make_client(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 101, in make_client
+    return SyncMPClient(vllm_config, executor_class, log_stats)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 723, in __init__
+    super().__init__(
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 535, in __init__
+    with launch_core_engines(
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 144, in __exit__
+    next(self.gen)
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/utils.py", line 1128, in launch_core_engines
+    wait_for_engine_startup(
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/utils.py", line 1187, in wait_for_engine_startup
+    raise RuntimeError(
+RuntimeError: Engine core initialization failed. See root cause above. Failed core proc(s): {}
+Process Process-1:
+Traceback (most recent call last):
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/fsx/jmanvi/Internship_project/ASD/src/apexp/week2/realtime_hot_e2e.py", line 204, in worker_process
+    llm = LLM(**llm_kwargs)
+          ^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/entrypoints/llm.py", line 381, in __init__
+    self.llm_engine = LLMEngine.from_engine_args(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 170, in from_engine_args
+    return cls(
+           ^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/llm_engine.py", line 104, in __init__
+    self.engine_core = EngineCoreClient.make_client(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 101, in make_client
+    return SyncMPClient(vllm_config, executor_class, log_stats)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/tracing/otel.py", line 178, in sync_wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 723, in __init__
+    super().__init__(
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/core_client.py", line 535, in __init__
+    with launch_core_engines(
+  File "/fsx/jmanvi/.local/share/uv/python/cpython-3.11.15-linux-x86_64-gnu/lib/python3.11/contextlib.py", line 144, in __exit__
+    next(self.gen)
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/utils.py", line 1128, in launch_core_engines
+    wait_for_engine_startup(
+  File "/fsx/jmanvi/Internship_project/.venv/lib/python3.11/site-packages/vllm/v1/engine/utils.py", line 1187, in wait_for_engine_startup
+    raise RuntimeError(
+RuntimeError: Engine core initialization failed. See root cause above. Failed core proc(s): {}
