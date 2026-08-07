@@ -1,0 +1,63 @@
+{
+  "large_root": "results/apexp_block/config_large_500",
+  "slow_router_dir": "results/apexp_block/config_large_500/week2/request_prompt_router_d128",
+  "training_roots": [
+    "results/apexp_block/config_large_500/week2/survival_utility_controller_v4",
+    "results/apexp_block/config_large_500/week2/survival_utility_controller_v4b_rankgroup"
+  ],
+  "model_dirs": {
+    "v4_speed": "results/apexp_block/config_large_500/week2/survival_utility_controller_v4/speed_first",
+    "v4_balanced": "results/apexp_block/config_large_500/week2/survival_utility_controller_v4/balanced",
+    "v4_efficient": "results/apexp_block/config_large_500/week2/survival_utility_controller_v4/efficient",
+    "v4b_speed_lr5e4_rank2": "results/apexp_block/config_large_500/week2/survival_utility_controller_v4b_rankgroup/speed_lr5e4_rank2",
+    "v4b_speed_lr3e4_rank3": "results/apexp_block/config_large_500/week2/survival_utility_controller_v4b_rankgroup/speed_lr3e4_rank3",
+    "v4b_balanced_lr5e4_rank2": "results/apexp_block/config_large_500/week2/survival_utility_controller_v4b_rankgroup/balanced_lr5e4_rank2",
+    "v4b_efficient_lr5e4_rank2": "results/apexp_block/config_large_500/week2/survival_utility_controller_v4b_rankgroup/efficient_lr5e4_rank2"
+  },
+  "workload_files": [
+    "data/benchmarks/By_split_phase_1/code_gen_test.jsonl",
+    "data/benchmarks/By_split_phase_1/mathematical_reasoning_test.jsonl",
+    "data/benchmarks/By_split_phase_1/long_context_completion_test.jsonl",
+    "data/benchmarks/By_split_phase_1/long_chain_reasoning_test.jsonl",
+    "data/benchmarks/By_split_phase_1/long_horizon_swe_test.jsonl",
+    "data/benchmarks/By_split_phase_1/hardware_gen_test.jsonl",
+    "data/benchmarks/By_split_phase_1/conversational_generation_test_sft.jsonl",
+    "data/benchmarks/By_split_phase_1/conversational_generation_test_gen.jsonl"
+  ],
+  "temperatures": [0.0, 0.1, 0.5],
+  "candidate_sets": {
+    "k8_16": "8,16",
+    "k4_8_16": "4,8,16",
+    "k1_16": "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16"
+  },
+  "metrics": [
+    "mean_tps",
+    "median_tps",
+    "speedup_vs_slow_only_tps",
+    "latency_speedup_vs_slow_only",
+    "wasted_token_rate",
+    "wasted_token_pct",
+    "accepted_per_block",
+    "full_accept_rate",
+    "mean_k",
+    "STE_vs_slow_only",
+    "ATE_vs_slow_only"
+  ],
+  "external_baselines": {
+    "BanditSpec": {
+      "policy": "use official repo only",
+      "env": "BANDITSPEC_ROOT"
+    },
+    "DSDE": {
+      "policy": "related work only unless official implementation is provided"
+    },
+    "AdaEAGLE": {
+      "policy": "related work only unless official implementation is provided",
+      "env": "ADAEAGLE_ROOT"
+    },
+    "HeteroSpec": {
+      "policy": "related work only unless official implementation is provided",
+      "env": "HETEROSPEC_ROOT"
+    }
+  }
+}
