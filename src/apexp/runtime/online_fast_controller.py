@@ -11,9 +11,9 @@ from typing import Deque, Dict
 import numpy as np
 
 try:
-    from src.apexp.runtime.learned_fast_survival_policy import LearnedFastSurvivalPolicy
+    from src.apexp.runtime.learned_fast_survival_policy_fast import FastLearnedSurvivalPolicy
 except Exception:
-    LearnedFastSurvivalPolicy = None
+    FastLearnedSurvivalPolicy = None
 
 
 @dataclass
@@ -55,10 +55,10 @@ class OnlineFastController:
         self.learned_policy = None
         self.learned_policy_error = ""
 
-        if self.learned_model_dir and LearnedFastSurvivalPolicy is not None:
+        if self.learned_model_dir and FastLearnedSurvivalPolicy is not None:
             try:
                 learned_device = os.environ.get("APEXP_LEARNED_FAST_DEVICE", "cpu")
-                self.learned_policy = LearnedFastSurvivalPolicy(self.learned_model_dir, device=learned_device)
+                self.learned_policy = FastLearnedSurvivalPolicy(self.learned_model_dir, device=learned_device)
             except Exception as e:
                 self.learned_policy = None
                 self.learned_policy_error = repr(e)
@@ -269,6 +269,7 @@ class OnlineFastController:
                     control=control,
                     candidate_ks=list(self.candidate_ks),
                     max_k=int(control.get("default_k", self.default_k)),
+                    trace_scores=bool(self.learned_trace_scores),
                 )
                 k = self._clip(int(res["chosen_k"]), int(control.get("default_k", self.default_k)))
                 return k, {

@@ -414,6 +414,8 @@ def main():
     ap.add_argument("--lambda-tps", type=float, default=0.30)
     ap.add_argument("--lambda-utility", type=float, default=1.00)
     ap.add_argument("--lambda-rank", type=float, default=1.00)
+    ap.add_argument("--grouped-rank-batches", action="store_true",
+                    help="Sort training rows so candidate k rows from the same rank group appear in the same batch.")
 
     args = ap.parse_args()
 
@@ -457,6 +459,24 @@ def main():
 
     if args.max_rows and args.max_rows > 0 and len(train) > args.max_rows:
         train = train.sample(args.max_rows, random_state=args.seed).copy()
+
+    train_shuffle = True
+    if args.grouped_rank_batches:
+        # Shuffle rank groups, but keep rows within each group adjacent.
+        # This makes the in-batch ranking loss actually see multiple candidate-k
+        # rows for the same prompt/method/block state.
+        unique_rank_groups = train["rank_group_id"].drop_duplicates().to_numpy()
+        rng_rank = np.random.default_rng(args.seed)
+        rng_rank.shuffle(unique_rank_groups)
+        rank_order = {int(g): i for i, g in enumerate(unique_rank_groups)}
+        train["_rank_order"] = train["rank_group_id"].map(rank_order).astype(int)
+        train = (
+            train.sort_values(["_rank_order", "rank_group_id", "k_requested"])
+            .drop(columns=["_rank_order"])
+            .reset_index(drop=True)
+        )
+        train_shuffle = False
+        print("using grouped-rank batches: train rows sorted by shuffled rank_group_id")
 
     print("train rows:", len(train), "test rows:", len(test))
     print("train prompts:", len(train_groups), "test prompts:", len(test_groups))
@@ -516,7 +536,7 @@ def main():
     train_loader = DataLoader(
         train_ds,
         batch_size=args.batch_size,
-        shuffle=True,
+        shuffle=train_shuffle,
         num_workers=4,
         pin_memory=True,
         drop_last=False,
@@ -648,6 +668,7 @@ def main():
         "lambda_tps": args.lambda_tps,
         "lambda_utility": args.lambda_utility,
         "lambda_rank": args.lambda_rank,
+        "grouped_rank_batches": bool(args.grouped_rank_batches),
         "n_train_rows": int(len(train)),
         "n_test_rows": int(len(test)),
         "n_train_prompts": int(len(train_groups)),
