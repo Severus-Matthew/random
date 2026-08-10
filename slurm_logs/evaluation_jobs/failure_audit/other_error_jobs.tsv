@@ -1,0 +1,2 @@
+job_id	job_name	kind	log_file	sbatch_file	evidence
+7006	apex_eval_survival_utility_controller_v4b_rankgroup_speed_lr	OTHER_ERROR	slurm_logs/evaluation_jobs/apex_eval_survival_utility_controller_v4b_rankgroup_speed_lr_7006.out		[worker failed] pool=slow_fast method=ngram_sd gpu=3: HfHubHTTPError: (Request ID: Root=1-6a7904bb-15d2f43f0300f9c552498991;75fa247c-e547-455c-a2be-86ee54c2b642)
