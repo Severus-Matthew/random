@@ -1,0 +1,1850 @@
+nohup: ignoring input
+[2026-08-11 21:30:18] JOB_LIST=slurm_logs/paper_eval_cap50_profile_kgrid/apex/submit_all_jobs.txt
+[2026-08-11 21:30:18] TOTAL=48 MAX_ACTIVE=4
+[2026-08-11 21:30:18] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_speed_first__quality_strict__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7929
+[2026-08-11 21:30:55] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_speed_first__quality_balanced__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: error: Unable to open file slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_speed_first__quality_balanced__k3_to_16.sbatch
+[2026-08-11 21:31:18] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_balanced__tps_strict__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7932
+[2026-08-11 21:31:55] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_speed_first__quality_balanced__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: error: Unable to open file slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_speed_first__quality_balanced__k2_4_8_12_16.sbatch
+[2026-08-11 21:32:18] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_balanced__tps_strict__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7933
+[2026-08-11 21:32:55] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_speed_first__quality_strict__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7934
+[2026-08-11 21:33:18] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_balanced__tps_strict__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7935
+[2026-08-11 21:33:55] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_speed_first__quality_strict__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: error: Unable to open file slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_speed_first__quality_strict__k3_to_16.sbatch
+[2026-08-11 21:34:18] active=4 submitted_index=4/48
+[2026-08-11 21:34:55] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_speed_first__quality_strict__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: error: Unable to open file slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_speed_first__quality_strict__k2_4_8_12_16.sbatch
+[2026-08-11 21:35:18] active=4 submitted_index=4/48
+[2026-08-11 21:35:55] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_balanced__tps_strict__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7936
+[2026-08-11 21:36:18] active=4 submitted_index=4/48
+[2026-08-11 21:36:55] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_balanced__tps_strict__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7937
+[2026-08-11 21:37:19] active=4 submitted_index=4/48
+[2026-08-11 21:37:55] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_balanced__tps_strict__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7938
+[2026-08-11 21:38:19] active=4 submitted_index=4/48
+[2026-08-11 21:38:55] active=4 submitted_index=12/63
+[2026-08-11 21:39:19] active=4 submitted_index=4/48
+[2026-08-11 21:39:55] active=4 submitted_index=12/63
+[2026-08-11 21:40:19] active=4 submitted_index=4/48
+[2026-08-11 21:40:55] active=4 submitted_index=12/63
+[2026-08-11 21:41:19] finished/disappeared: 7932
+[2026-08-11 21:41:19] finished/disappeared: 7933
+[2026-08-11 21:41:19] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_balanced__quality_strict__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7939
+[2026-08-11 21:41:55] finished/disappeared: 7934
+[2026-08-11 21:41:55] finished/disappeared: 7936
+[2026-08-11 21:41:55] finished/disappeared: 7937
+[2026-08-11 21:41:55] finished/disappeared: 7938
+[2026-08-11 21:41:55] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_balanced__quality_balanced__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: error: Unable to open file slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_balanced__quality_balanced__k1_to_16.sbatch
+[2026-08-11 21:42:19] finished/disappeared: 7935
+[2026-08-11 21:42:19] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_efficient__tps_strict__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7940
+[2026-08-11 21:42:55] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_balanced__quality_balanced__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: error: Unable to open file slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_balanced__quality_balanced__k3_to_16.sbatch
+[2026-08-11 21:43:19] finished/disappeared: 7939
+[2026-08-11 21:43:19] finished/disappeared: 7940
+[2026-08-11 21:43:19] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_efficient__tps_strict__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7942
+[2026-08-11 21:43:56] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_balanced__quality_balanced__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: error: Unable to open file slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_balanced__quality_balanced__k2_4_8_12_16.sbatch
+[2026-08-11 21:44:19] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_efficient__quality_balanced__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7943
+[2026-08-11 21:44:56] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_balanced__quality_strict__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: error: Unable to open file slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_balanced__quality_strict__k1_to_16.sbatch
+[2026-08-11 21:45:19] finished/disappeared: 7942
+[2026-08-11 21:45:19] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_efficient__quality_balanced__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7944
+[2026-08-11 21:45:56] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_balanced__quality_strict__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: error: Unable to open file slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_balanced__quality_strict__k3_to_16.sbatch
+[2026-08-11 21:46:19] finished/disappeared: 7943
+[2026-08-11 21:46:19] finished/disappeared: 7944
+[2026-08-11 21:46:19] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_efficient__quality_balanced__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7946
+[2026-08-11 21:46:56] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_balanced__quality_strict__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7947
+[2026-08-11 21:47:19] finished/disappeared: 7946
+[2026-08-11 21:47:19] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_efficient__quality_strict__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7948
+[2026-08-11 21:47:56] finished/disappeared: 7947
+[2026-08-11 21:47:56] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_efficient__tps_strict__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7949
+[2026-08-11 21:48:19] finished/disappeared: 7948
+[2026-08-11 21:48:19] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_efficient__quality_strict__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7950
+[2026-08-11 21:48:56] finished/disappeared: 7949
+[2026-08-11 21:48:56] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_efficient__tps_strict__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: error: Unable to open file slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_efficient__tps_strict__k3_to_16.sbatch
+[2026-08-11 21:49:20] finished/disappeared: 7950
+[2026-08-11 21:49:20] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr5e4_rank2__tps_strict__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7951
+[2026-08-11 21:49:56] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_efficient__tps_strict__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7952
+[2026-08-11 21:50:20] finished/disappeared: 7951
+[2026-08-11 21:50:20] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr5e4_rank2__tps_strict__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7953
+[2026-08-11 21:50:56] finished/disappeared: 7952
+[2026-08-11 21:50:56] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_efficient__quality_balanced__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7954
+[2026-08-11 21:51:20] finished/disappeared: 7953
+[2026-08-11 21:51:20] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr5e4_rank2__tps_strict__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7955
+[2026-08-11 21:51:56] finished/disappeared: 7954
+[2026-08-11 21:51:56] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_efficient__quality_balanced__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7956
+[2026-08-11 21:52:20] finished/disappeared: 7955
+[2026-08-11 21:52:20] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr5e4_rank2__quality_balanced__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7957
+[2026-08-11 21:52:56] finished/disappeared: 7956
+[2026-08-11 21:52:56] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_efficient__quality_balanced__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7958
+[2026-08-11 21:53:20] finished/disappeared: 7957
+[2026-08-11 21:53:20] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr5e4_rank2__quality_balanced__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7959
+[2026-08-11 21:53:56] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_efficient__quality_strict__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7960
+[2026-08-11 21:54:20] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr5e4_rank2__quality_balanced__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7961
+[2026-08-11 21:54:56] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_efficient__quality_strict__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: error: Unable to open file slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_efficient__quality_strict__k3_to_16.sbatch
+[2026-08-11 21:55:20] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr5e4_rank2__quality_strict__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7962
+[2026-08-11 21:55:56] finished/disappeared: 7958
+[2026-08-11 21:55:56] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4_efficient__quality_strict__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7963
+[2026-08-11 21:56:20] finished/disappeared: 7959
+[2026-08-11 21:56:20] finished/disappeared: 7961
+[2026-08-11 21:56:20] finished/disappeared: 7962
+[2026-08-11 21:56:20] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr5e4_rank2__quality_strict__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7964
+[2026-08-11 21:56:56] finished/disappeared: 7960
+[2026-08-11 21:56:56] finished/disappeared: 7963
+[2026-08-11 21:56:56] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr5e4_rank2__tps_strict__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7965
+[2026-08-11 21:57:20] finished/disappeared: 7964
+[2026-08-11 21:57:20] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr5e4_rank2__quality_strict__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7966
+[2026-08-11 21:57:56] finished/disappeared: 7965
+[2026-08-11 21:57:56] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr5e4_rank2__tps_strict__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7967
+[2026-08-11 21:58:20] finished/disappeared: 7929
+[2026-08-11 21:58:20] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr3e4_rank3__tps_strict__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7968
+[2026-08-11 21:58:56] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr5e4_rank2__tps_strict__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7969
+[2026-08-11 21:59:20] finished/disappeared: 7968
+[2026-08-11 21:59:20] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr3e4_rank3__tps_strict__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7970
+[2026-08-11 21:59:56] finished/disappeared: 7967
+[2026-08-11 21:59:56] finished/disappeared: 7969
+[2026-08-11 21:59:56] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr5e4_rank2__quality_balanced__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7971
+[2026-08-11 22:00:20] finished/disappeared: 7966
+[2026-08-11 22:00:20] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr3e4_rank3__tps_strict__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7972
+[2026-08-11 22:00:56] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr5e4_rank2__quality_balanced__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7973
+[2026-08-11 22:01:21] finished/disappeared: 7970
+[2026-08-11 22:01:21] finished/disappeared: 7972
+[2026-08-11 22:01:21] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr3e4_rank3__quality_balanced__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7974
+[2026-08-11 22:01:57] finished/disappeared: 7971
+[2026-08-11 22:01:57] finished/disappeared: 7973
+[2026-08-11 22:01:57] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr5e4_rank2__quality_balanced__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7975
+[2026-08-11 22:02:21] finished/disappeared: 7974
+[2026-08-11 22:02:21] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr3e4_rank3__quality_balanced__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7976
+[2026-08-11 22:02:57] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr5e4_rank2__quality_strict__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7977
+[2026-08-11 22:03:21] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr3e4_rank3__quality_balanced__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7978
+[2026-08-11 22:03:57] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr5e4_rank2__quality_strict__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7979
+[2026-08-11 22:04:21] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr3e4_rank3__quality_strict__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7980
+[2026-08-11 22:04:57] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr5e4_rank2__quality_strict__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7981
+[2026-08-11 22:05:21] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr3e4_rank3__quality_strict__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7982
+[2026-08-11 22:05:57] active=4 submitted_index=36/63
+[2026-08-11 22:06:21] active=4 submitted_index=29/48
+[2026-08-11 22:06:57] active=4 submitted_index=36/63
+[2026-08-11 22:07:21] active=4 submitted_index=29/48
+[2026-08-11 22:07:57] active=4 submitted_index=36/63
+[2026-08-11 22:08:21] active=4 submitted_index=29/48
+[2026-08-11 22:08:57] active=4 submitted_index=36/63
+[2026-08-11 22:09:21] active=4 submitted_index=29/48
+[2026-08-11 22:09:57] active=4 submitted_index=36/63
+[2026-08-11 22:10:21] finished/disappeared: 7976
+[2026-08-11 22:10:21] finished/disappeared: 7978
+[2026-08-11 22:10:21] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr3e4_rank3__quality_strict__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7983
+[2026-08-11 22:10:57] finished/disappeared: 7977
+[2026-08-11 22:10:57] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr3e4_rank3__tps_strict__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7985
+[2026-08-11 22:11:21] finished/disappeared: 7980
+[2026-08-11 22:11:21] finished/disappeared: 7982
+[2026-08-11 22:11:21] finished/disappeared: 7983
+[2026-08-11 22:11:21] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_balanced_lr5e4_rank2__tps_strict__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7986
+[2026-08-11 22:11:57] finished/disappeared: 7979
+[2026-08-11 22:11:57] finished/disappeared: 7981
+[2026-08-11 22:11:57] finished/disappeared: 7985
+[2026-08-11 22:11:57] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr3e4_rank3__tps_strict__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7987
+[2026-08-11 22:12:21] finished/disappeared: 7986
+[2026-08-11 22:12:21] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_balanced_lr5e4_rank2__tps_strict__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7989
+[2026-08-11 22:12:57] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr3e4_rank3__tps_strict__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7990
+[2026-08-11 22:13:21] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_balanced_lr5e4_rank2__tps_strict__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7991
+[2026-08-11 22:13:58] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr3e4_rank3__quality_balanced__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7993
+[2026-08-11 22:14:22] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_balanced_lr5e4_rank2__quality_balanced__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7994
+[2026-08-11 22:14:58] active=4 submitted_index=40/63
+[2026-08-11 22:15:22] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_balanced_lr5e4_rank2__quality_balanced__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7995
+[2026-08-11 22:15:58] active=4 submitted_index=40/63
+[2026-08-11 22:16:22] active=4 submitted_index=35/48
+[2026-08-11 22:16:58] active=4 submitted_index=40/63
+[2026-08-11 22:17:22] active=4 submitted_index=35/48
+[2026-08-11 22:17:58] finished/disappeared: 7987
+[2026-08-11 22:17:58] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr3e4_rank3__quality_balanced__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7997
+[2026-08-11 22:18:22] finished/disappeared: 7989
+[2026-08-11 22:18:22] finished/disappeared: 7991
+[2026-08-11 22:18:22] finished/disappeared: 7994
+[2026-08-11 22:18:22] finished/disappeared: 7995
+[2026-08-11 22:18:22] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_balanced_lr5e4_rank2__quality_balanced__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7998
+[2026-08-11 22:18:58] finished/disappeared: 7990
+[2026-08-11 22:18:58] finished/disappeared: 7993
+[2026-08-11 22:18:58] finished/disappeared: 7997
+[2026-08-11 22:18:58] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr3e4_rank3__quality_balanced__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 7999
+[2026-08-11 22:19:22] finished/disappeared: 7998
+[2026-08-11 22:19:22] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_balanced_lr5e4_rank2__quality_strict__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8000
+[2026-08-11 22:19:58] finished/disappeared: 7999
+[2026-08-11 22:19:58] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr3e4_rank3__quality_strict__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8001
+[2026-08-11 22:20:22] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_balanced_lr5e4_rank2__quality_strict__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8002
+[2026-08-11 22:20:58] finished/disappeared: 8001
+[2026-08-11 22:20:58] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr3e4_rank3__quality_strict__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8003
+[2026-08-11 22:21:22] finished/disappeared: 8000
+[2026-08-11 22:21:22] finished/disappeared: 8002
+[2026-08-11 22:21:22] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_balanced_lr5e4_rank2__quality_strict__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8004
+[2026-08-11 22:21:58] finished/disappeared: 8003
+[2026-08-11 22:21:58] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_speed_lr3e4_rank3__quality_strict__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8005
+[2026-08-11 22:22:22] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_efficient_lr5e4_rank2__tps_strict__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8006
+[2026-08-11 22:22:58] finished/disappeared: 8005
+[2026-08-11 22:22:58] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_balanced_lr5e4_rank2__tps_strict__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8007
+[2026-08-11 22:23:22] finished/disappeared: 8004
+[2026-08-11 22:23:22] finished/disappeared: 8006
+[2026-08-11 22:23:22] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_efficient_lr5e4_rank2__tps_strict__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8008
+[2026-08-11 22:23:58] finished/disappeared: 8007
+[2026-08-11 22:23:58] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_balanced_lr5e4_rank2__tps_strict__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8009
+[2026-08-11 22:24:22] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_efficient_lr5e4_rank2__tps_strict__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8010
+[2026-08-11 22:24:59] finished/disappeared: 8009
+[2026-08-11 22:24:59] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_balanced_lr5e4_rank2__tps_strict__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8011
+[2026-08-11 22:25:22] finished/disappeared: 8008
+[2026-08-11 22:25:22] finished/disappeared: 8010
+[2026-08-11 22:25:22] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_efficient_lr5e4_rank2__quality_balanced__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8012
+[2026-08-11 22:25:59] finished/disappeared: 7975
+[2026-08-11 22:25:59] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_balanced_lr5e4_rank2__quality_balanced__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8013
+[2026-08-11 22:26:23] finished/disappeared: 8012
+[2026-08-11 22:26:23] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_efficient_lr5e4_rank2__quality_balanced__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8014
+[2026-08-11 22:26:59] finished/disappeared: 8011
+[2026-08-11 22:26:59] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_balanced_lr5e4_rank2__quality_balanced__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8015
+[2026-08-11 22:27:23] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_efficient_lr5e4_rank2__quality_balanced__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8016
+[2026-08-11 22:27:59] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_balanced_lr5e4_rank2__quality_balanced__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8017
+[2026-08-11 22:28:23] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_efficient_lr5e4_rank2__quality_strict__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8018
+[2026-08-11 22:28:59] finished/disappeared: 8015
+[2026-08-11 22:28:59] finished/disappeared: 8017
+[2026-08-11 22:28:59] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_balanced_lr5e4_rank2__quality_strict__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8019
+[2026-08-11 22:29:23] finished/disappeared: 8014
+[2026-08-11 22:29:23] finished/disappeared: 8016
+[2026-08-11 22:29:23] finished/disappeared: 8018
+[2026-08-11 22:29:23] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_efficient_lr5e4_rank2__quality_strict__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8020
+[2026-08-11 22:29:59] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_balanced_lr5e4_rank2__quality_strict__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8021
+[2026-08-11 22:30:23] finished/disappeared: 8020
+[2026-08-11 22:30:23] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_efficient_lr5e4_rank2__quality_strict__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8022
+[2026-08-11 22:30:59] finished/disappeared: 8019
+[2026-08-11 22:30:59] finished/disappeared: 8021
+[2026-08-11 22:30:59] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_balanced_lr5e4_rank2__quality_strict__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8023
+[2026-08-11 22:31:23] finished/disappeared: 8022
+[2026-08-11 22:31:23] active=0 submitted_index=48/48
+[2026-08-11 22:31:23] all done
+[2026-08-11 22:31:59] finished/disappeared: 8023
+[2026-08-11 22:31:59] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_efficient_lr5e4_rank2__tps_strict__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8024
+[2026-08-11 22:32:59] finished/disappeared: 8024
+[2026-08-11 22:32:59] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_efficient_lr5e4_rank2__tps_strict__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8025
+[2026-08-11 22:33:59] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_efficient_lr5e4_rank2__tps_strict__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8026
+[2026-08-11 22:34:59] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_efficient_lr5e4_rank2__quality_balanced__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8027
+[2026-08-11 22:35:59] finished/disappeared: 8025
+[2026-08-11 22:35:59] finished/disappeared: 8026
+[2026-08-11 22:35:59] finished/disappeared: 8027
+[2026-08-11 22:35:59] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_efficient_lr5e4_rank2__quality_balanced__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8028
+[2026-08-11 22:37:00] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_efficient_lr5e4_rank2__quality_balanced__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8029
+[2026-08-11 22:38:00] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_efficient_lr5e4_rank2__quality_strict__k1_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8030
+[2026-08-11 22:39:00] finished/disappeared: 8028
+[2026-08-11 22:39:00] finished/disappeared: 8029
+[2026-08-11 22:39:00] finished/disappeared: 8030
+[2026-08-11 22:39:00] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_efficient_lr5e4_rank2__quality_strict__k3_to_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8031
+[2026-08-11 22:40:00] submitting slurm_logs/paper_eval_cap50_profile_kgrid/apex/survival_utility_controller_v4b_rankgroup_efficient_lr5e4_rank2__quality_strict__k2_4_8_12_16.sbatch
+sbatch: spank: option "container-image" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mounts" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-workdir" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-name" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-save" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-mount-home" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-remap-root" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "no-container-entrypoint" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-writable" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-readonly" provided by both spank_pyxis.so and spank_pyxis.so
+sbatch: spank: option "container-env" provided by both spank_pyxis.so and spank_pyxis.so
+Submitted batch job 8040
+[2026-08-11 22:41:00] active=3 submitted_index=63/63
+[2026-08-11 22:42:00] active=3 submitted_index=63/63
+[2026-08-11 22:43:00] finished/disappeared: 8031
+[2026-08-11 22:43:00] finished/disappeared: 8040
+[2026-08-11 22:43:00] active=1 submitted_index=63/63
+[2026-08-11 22:44:00] active=1 submitted_index=63/63
+[2026-08-11 22:45:00] active=1 submitted_index=63/63
+[2026-08-11 22:46:00] active=1 submitted_index=63/63
+[2026-08-11 22:47:00] active=1 submitted_index=63/63
+[2026-08-11 22:48:00] active=1 submitted_index=63/63
+[2026-08-11 22:49:00] active=1 submitted_index=63/63
+[2026-08-11 22:50:00] active=1 submitted_index=63/63
+[2026-08-11 22:51:00] active=1 submitted_index=63/63
+[2026-08-11 22:52:00] finished/disappeared: 8013
+[2026-08-11 22:52:00] active=0 submitted_index=63/63
+[2026-08-11 22:52:00] all done
