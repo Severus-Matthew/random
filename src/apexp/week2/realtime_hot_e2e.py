@@ -71,6 +71,8 @@ def infer_workload(path: str) -> str:
         return "conversational_generation_sft"
     if "conversational_generation_test_gen" in name:
         return "conversational_generation_gen"
+    if "hardware_gen" in name:
+        return "hardware_gen"
     if "code_gen" in name:
         return "code_gen"
     return Path(path).stem
@@ -85,7 +87,7 @@ def workload_max_tokens(workload: str) -> int:
 
 
 def extract_prompt(obj: dict[str, Any]) -> str:
-    for k in ["prompt", "prompt_text", "input", "question", "text"]:
+    for k in ["prompt", "prompt_text", "input", "question", "problem_statement", "text", "content"]:
         if k in obj and obj[k] is not None:
             return str(obj[k])
 
@@ -292,7 +294,7 @@ def worker_process(pool: str, method: str, gpu: str, q: Queue, ready_q: Queue, a
             "force_k": force_k,
             "max_k": int(args.max_engine_k),
             "min_k": int(args.fast_min_k),
-            "candidate_ks": args.fast_candidate_ks_list,
+            "candidate_ks": (args.fast_candidate_ks_list if pool == "slow_fast" else [int(task.slow_k)]),
         }
         control_file.write_text(json.dumps(control, sort_keys=True))
 

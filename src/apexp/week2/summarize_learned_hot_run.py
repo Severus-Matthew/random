@@ -126,11 +126,16 @@ def summarize_learned_trace(root: Path):
         try:
             with p.open() as f:
                 for line in f:
-                    if not line.strip():
-                        continue
-                    e = json.loads(line)
+                    for part in line.split("\\\\n"):
+                        part = part.strip()
+                        if not part:
+                            continue
+                        try:
+                            e = json.loads(part)
+                        except Exception:
+                            continue
 
-                    typ = e.get("type")
+                        typ = e.get("type")
                     if typ == "learned_policy_init":
                         counts[("learned_policy_init", e.get("loaded"), e.get("error", ""))] += 1
 

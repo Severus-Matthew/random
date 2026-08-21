@@ -4,16 +4,20 @@ import json
 import os
 import time
 from collections import deque
+from concurrent.futures import Future, ThreadPoolExecutor
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Deque, Dict
+from typing import Deque, Dict, Optional
 
 import numpy as np
 
 try:
-    from src.apexp.runtime.learned_fast_survival_policy_fast import FastLearnedSurvivalPolicy
+    from apexp.runtime.learned_fast_survival_policy_fast import FastLearnedSurvivalPolicy
 except Exception:
-    FastLearnedSurvivalPolicy = None
+    try:
+        from src.apexp.runtime.learned_fast_survival_policy_fast import FastLearnedSurvivalPolicy
+    except Exception:
+        FastLearnedSurvivalPolicy = None
 
 
 @dataclass
@@ -22,17 +26,24 @@ class RequestState:
     next_k: int
     current_k: int
     n_blocks: int = 0
-    k_hist: Deque[int] = field(default_factory=lambda: deque(maxlen=32))
-    accepted_hist: Deque[int] = field(default_factory=lambda: deque(maxlen=32))
-    rejected_hist: Deque[int] = field(default_factory=lambda: deque(maxlen=32))
-    full_accept_hist: Deque[int] = field(default_factory=lambda: deque(maxlen=32))
+    k_hist: Deque[int] = field(default_factory=lambda: deque(maxlen=64))
+    accepted_hist: Deque[int] = field(default_factory=lambda: deque(maxlen=64))
+    rejected_hist: Deque[int] = field(default_factory=lambda: deque(maxlen=64))
+    full_accept_hist: Deque[int] = field(default_factory=lambda: deque(maxlen=64))
+
+    pending_policy_future: Optional[Future] = None
+    pending_policy_submit_block: int = 0
+    last_policy_submit_block: int = 0
+    last_policy_apply_block: int = 0
 
 
 class OnlineFastController:
     def __init__(self):
         import inspect
+
         self._controller_file = inspect.getfile(OnlineFastController)
         self.enabled = os.environ.get("APEXP_ONLINE_FAST", "0") == "1"
+
         self.default_k = int(os.environ.get("APEXP_DEFAULT_K", "16"))
         self.initial_k = int(os.environ.get("APEXP_INITIAL_K", str(self.default_k)))
         self.min_k = int(os.environ.get("APEXP_MIN_K", "1"))
@@ -44,6 +55,14 @@ class OnlineFastController:
         self.down_ratio = float(os.environ.get("APEXP_FAST_DOWN_RATIO", "0.45"))
         self.up_ratio = float(os.environ.get("APEXP_FAST_UP_RATIO", "0.85"))
         self.up_full_rate = float(os.environ.get("APEXP_FAST_UP_FULL_RATE", "0.75"))
+
+        self.learned_trace_scores = os.environ.get("APEXP_LEARNED_FAST_TRACE_SCORES", "0") == "1"
+        self.learned_every_n = max(1, int(os.environ.get("APEXP_LEARNED_FAST_EVERY_N", "4")))
+        self.learned_first_window = max(
+            1,
+            int(os.environ.get("APEXP_LEARNED_FAST_FIRST_WINDOW", str(self.min_obs))),
+        )
+        self.async_policy = os.environ.get("APEXP_LEARNED_FAST_ASYNC", "1") == "1"
 
         self.control_file = os.environ.get("APEXP_REQUEST_CONTROL_FILE", "")
         self.last_control_id = None
@@ -58,10 +77,15 @@ class OnlineFastController:
         if self.learned_model_dir and FastLearnedSurvivalPolicy is not None:
             try:
                 learned_device = os.environ.get("APEXP_LEARNED_FAST_DEVICE", "cpu")
-                self.learned_policy = FastLearnedSurvivalPolicy(self.learned_model_dir, device=learned_device)
+                self.learned_policy = FastLearnedSurvivalPolicy(
+                    self.learned_model_dir,
+                    device=learned_device,
+                )
             except Exception as e:
                 self.learned_policy = None
                 self.learned_policy_error = repr(e)
+
+        self.policy_executor = ThreadPoolExecutor(max_workers=1) if self.async_policy else None
 
         self.trace_path = os.environ.get("APEXP_ONLINE_FAST_TRACE", "")
         self.trace_f = None
@@ -77,21 +101,41 @@ class OnlineFastController:
                 "loaded": self.learned_policy is not None,
                 "error": self.learned_policy_error,
                 "controller_file": getattr(self, "_controller_file", ""),
+                "async_policy": bool(self.async_policy),
+                "learned_every_n": int(self.learned_every_n),
+                "learned_first_window": int(self.learned_first_window),
+                "min_k": int(self.min_k),
+                "candidate_ks": list(self.candidate_ks),
             })
 
+    def _normalize_candidates(self, vals, include_min: bool = True):
+        out = []
+        for x in vals:
+            try:
+                k = int(x)
+            except Exception:
+                continue
+            if self.min_k <= k <= self.max_k:
+                out.append(k)
+
+        if include_min and self.min_k <= self.max_k:
+            out.append(int(self.min_k))
+
+        out = sorted(set(out))
+        return out or [max(1, min(self.max_k, self.min_k))]
+
     def _candidate_ks(self):
-        vals = []
-        for x in os.environ.get("APEXP_FAST_CANDIDATE_KS", "1,2,4,8,16").split(","):
-            x = x.strip()
-            if x:
-                vals.append(int(x))
-        vals = sorted(set(k for k in vals if self.min_k <= k <= self.max_k))
-        return vals or [self.default_k]
+        raw = os.environ.get("APEXP_FAST_CANDIDATE_KS", "1,2,4,8,16")
+        vals = [x.strip() for x in raw.split(",") if x.strip()]
+        return self._normalize_candidates(vals, include_min=True)
 
     def _clip(self, k: int, upper: int | None = None) -> int:
         upper = self.max_k if upper is None else min(self.max_k, int(upper))
+        valid = [x for x in self.candidate_ks if self.min_k <= x <= upper]
+        if not valid:
+            valid = [max(self.min_k, min(upper, int(k)))]
         k = max(self.min_k, min(upper, int(k)))
-        return min(self.candidate_ks, key=lambda x: abs(x - k))
+        return min(valid, key=lambda x: abs(x - k))
 
     def _read_control(self) -> dict:
         if not self.control_file:
@@ -108,12 +152,15 @@ class OnlineFastController:
         control_id = c.get("control_id") or c.get("task_id")
         if control_id and control_id != self.last_control_id:
             self.last_control_id = control_id
+
+            env_min = int(os.environ.get("APEXP_MIN_K", str(self.min_k)))
             self.default_k = int(c.get("default_k", self.default_k))
             self.initial_k = int(c.get("initial_k", c.get("slow_k", self.default_k)))
             self.max_k = int(c.get("max_k", self.max_k))
-            self.min_k = int(c.get("min_k", self.min_k))
+            self.min_k = max(env_min, int(c.get("min_k", self.min_k)))
+
             if "candidate_ks" in c:
-                self.candidate_ks = sorted(set(int(x) for x in c["candidate_ks"]))
+                self.candidate_ks = self._normalize_candidates(c["candidate_ks"], include_min=True)
             else:
                 self.candidate_ks = self._candidate_ks()
 
@@ -128,6 +175,8 @@ class OnlineFastController:
                 "default_k": self.default_k,
                 "initial_k": self.initial_k,
                 "global_next_k": self.global_next_k,
+                "min_k": self.min_k,
+                "candidate_ks": list(self.candidate_ks),
             })
 
         return c
@@ -159,6 +208,14 @@ class OnlineFastController:
             k = int(c.get("slow_k", c.get("initial_k", request_default_k)))
         else:
             st = self._state(str(req_id), request_default_k)
+            applied = self._maybe_apply_completed_policy(st, c, where="choose")
+            if applied:
+                self._trace({
+                    "time": time.time(),
+                    "type": "async_policy_applied_in_choose",
+                    "req_id": str(req_id),
+                    **applied,
+                })
             k = st.next_k
 
         k = self._clip(k, request_default_k)
@@ -185,7 +242,6 @@ class OnlineFastController:
         c = self._read_control()
         mode = str(c.get("mode", "dynamic"))
 
-        # Fixed mode is slow-only. We still observe/log, but do not adapt.
         req_id = str(event.get("req_id", "unknown_req"))
         default_k = int(c.get("default_k", self.default_k))
         st = self._state(req_id, default_k)
@@ -203,13 +259,35 @@ class OnlineFastController:
         st.full_accept_hist.append(1 if full else 0)
 
         old_next = st.next_k
-        policy_info = {}
+        policy_info = {
+            "learned_policy_used": False,
+            "policy_runtime_ms": 0.0,
+            "candidate_scores": None,
+            "policy_error": "",
+        }
+
         if mode == "dynamic":
-            st.next_k, policy_info = self._policy(st, c)
+            applied = self._maybe_apply_completed_policy(st, c, where="observe")
+            submitted = self._maybe_submit_policy(st, c)
+
+            if applied:
+                policy_info.update(applied)
+            elif submitted:
+                policy_info.update(submitted)
+            elif st.pending_policy_future is not None:
+                policy_info["policy_error"] = "async_policy_pending_decode_continues"
+            else:
+                stats_now = self._window_stats(st)
+                if stats_now["n"] < self.min_obs:
+                    policy_info["policy_error"] = "min_obs_not_reached"
+                else:
+                    policy_info["policy_error"] = "not_policy_interval_decode_continues"
+
             self.global_next_k = st.next_k
         else:
             st.next_k = self._clip(int(c.get("force_k", c.get("slow_k", default_k))), default_k)
             self.global_next_k = st.next_k
+            policy_info["policy_error"] = "fixed_mode_no_adapt"
 
         stats = self._window_stats(st)
 
@@ -230,6 +308,9 @@ class OnlineFastController:
             "window_zero_rate": float(stats["zero_rate"]),
             "old_next_k": int(old_next),
             "next_k_for_future_unscheduled_block": int(st.next_k),
+            "pending_policy": st.pending_policy_future is not None,
+            "last_policy_submit_block": int(st.last_policy_submit_block),
+            "last_policy_apply_block": int(st.last_policy_apply_block),
             "learned_policy_used": bool(policy_info.get("learned_policy_used", False)),
             "policy_runtime_ms": policy_info.get("policy_runtime_ms", None),
             "candidate_scores": policy_info.get("candidate_scores", None),
@@ -256,70 +337,149 @@ class OnlineFastController:
             "zero_rate": float(np.mean([a == 0 for a in acc])),
         }
 
-    def _policy(self, st: RequestState, control: dict | None = None):
-        control = control or {}
-        cur = int(st.current_k or self.initial_k)
-        stats = self._window_stats(st)
+    def _snapshot_state(self, st: RequestState) -> RequestState:
+        snap = RequestState(
+            req_id=st.req_id,
+            next_k=int(st.next_k),
+            current_k=int(st.current_k),
+            n_blocks=int(st.n_blocks),
+            k_hist=deque(list(st.k_hist), maxlen=64),
+            accepted_hist=deque(list(st.accepted_hist), maxlen=64),
+            rejected_hist=deque(list(st.rejected_hist), maxlen=64),
+            full_accept_hist=deque(list(st.full_accept_hist), maxlen=64),
+        )
+        snap.last_policy_submit_block = int(st.last_policy_submit_block)
+        snap.last_policy_apply_block = int(st.last_policy_apply_block)
+        return snap
 
-        # Learned survival-utility policy. Fallback to heuristic if unavailable/failing.
-        if self.learned_policy is not None and stats["n"] >= self.min_obs:
-            try:
-                res = self.learned_policy.choose_k(
-                    st=st,
-                    control=control,
-                    candidate_ks=list(self.candidate_ks),
-                    max_k=int(control.get("default_k", self.default_k)),
-                    trace_scores=bool(self.learned_trace_scores),
-                )
-                k = self._clip(int(res["chosen_k"]), int(control.get("default_k", self.default_k)))
-                return k, {
-                    "learned_policy_used": True,
-                    "policy_runtime_ms": res.get("policy_runtime_ms", None),
-                    "candidate_scores": res.get("candidate_scores", None),
-                    "policy_error": "",
-                }
-            except Exception as e:
-                return cur, {
+    def _learned_choose_async(
+        self,
+        st_snapshot: RequestState,
+        control_snapshot: dict,
+        candidate_ks: list[int],
+        max_k: int,
+        trace_scores: bool,
+    ) -> dict:
+        if self.learned_policy is None:
+            return {
+                "chosen_k": int(st_snapshot.next_k),
+                "policy_runtime_ms": 0.0,
+                "policy_error": "learned_policy_not_loaded",
+            }
+
+        return self.learned_policy.choose_k(
+            st=st_snapshot,
+            control=control_snapshot,
+            candidate_ks=list(candidate_ks),
+            max_k=int(max_k),
+            trace_scores=bool(trace_scores),
+        )
+
+    def _maybe_apply_completed_policy(self, st: RequestState, control: dict, where: str) -> dict:
+        fut = st.pending_policy_future
+        if fut is None or not fut.done():
+            return {}
+
+        submit_block = int(st.pending_policy_submit_block)
+        st.pending_policy_future = None
+        st.pending_policy_submit_block = 0
+
+        try:
+            res = fut.result()
+            if res.get("policy_error"):
+                return {
                     "learned_policy_used": False,
-                    "policy_runtime_ms": None,
-                    "candidate_scores": None,
-                    "policy_error": repr(e),
+                    "policy_runtime_ms": res.get("policy_runtime_ms", 0.0),
+                    "candidate_scores": res.get("candidate_scores", None),
+                    "policy_error": str(res.get("policy_error")),
                 }
 
-        if stats["n"] < self.min_obs:
-            return cur, {"learned_policy_used": False, "policy_error": "min_obs_not_reached"}
+            k = self._clip(int(res["chosen_k"]), int(control.get("default_k", self.default_k)))
+            st.next_k = int(k)
+            st.last_policy_apply_block = int(st.n_blocks)
 
-        avg_ratio = stats["avg_accept_ratio"]
-        full_rate = stats["full_rate"]
-        zero_rate = stats["zero_rate"]
+            return {
+                "learned_policy_used": True,
+                "policy_runtime_ms": res.get("policy_runtime_ms", None),
+                "candidate_scores": res.get("candidate_scores", None),
+                "policy_error": f"async_policy_applied_{where}_submitted_at_block_{submit_block}",
+            }
+        except Exception as e:
+            return {
+                "learned_policy_used": False,
+                "policy_runtime_ms": None,
+                "candidate_scores": None,
+                "policy_error": repr(e),
+            }
 
-        if cur <= 1:
-            if avg_ratio >= 0.90 and full_rate >= 0.75:
-                return self._higher(cur), {"learned_policy_used": False, "policy_error": "heuristic_fallback"}
-            return cur, {"learned_policy_used": False, "policy_error": "heuristic_fallback"}
+    def _maybe_submit_policy(self, st: RequestState, control: dict) -> dict:
+        if self.learned_policy is None:
+            return {
+                "learned_policy_used": False,
+                "policy_error": f"learned_policy_not_loaded:{self.learned_policy_error}",
+            }
 
-        if cur == 2:
-            if avg_ratio >= 0.85 and full_rate >= 0.50:
-                return self._higher(cur), {"learned_policy_used": False, "policy_error": "heuristic_fallback"}
-            if zero_rate >= 0.75 and avg_ratio <= 0.25:
-                return self._lower(cur), {"learned_policy_used": False, "policy_error": "heuristic_fallback"}
-            return cur, {"learned_policy_used": False, "policy_error": "heuristic_fallback"}
+        if st.pending_policy_future is not None:
+            return {}
 
-        if avg_ratio <= self.down_ratio or zero_rate >= 0.50:
-            return self._lower(cur), {"learned_policy_used": False, "policy_error": "heuristic_fallback"}
+        stats = self._window_stats(st)
+        if stats["n"] < self.min_obs or st.n_blocks < self.learned_first_window:
+            return {"learned_policy_used": False, "policy_error": "min_obs_not_reached"}
 
-        if avg_ratio >= self.up_ratio and full_rate >= self.up_full_rate:
-            return self._higher(cur), {"learned_policy_used": False, "policy_error": "heuristic_fallback"}
+        first_submit = st.last_policy_submit_block <= 0
+        enough_gap = (int(st.n_blocks) - int(st.last_policy_submit_block)) >= int(self.learned_every_n)
 
-        return cur, {"learned_policy_used": False, "policy_error": "heuristic_fallback"}
+        if not (first_submit or enough_gap):
+            return {}
 
-    def _lower(self, cur: int) -> int:
-        lows = [k for k in self.candidate_ks if k < cur]
-        return max(lows) if lows else min(self.candidate_ks)
+        snap = self._snapshot_state(st)
+        control_snapshot = dict(control)
+        candidate_ks = list(self.candidate_ks)
+        max_k = int(control.get("default_k", self.default_k))
 
-    def _higher(self, cur: int) -> int:
-        highs = [k for k in self.candidate_ks if k > cur]
-        return min(highs) if highs else max(self.candidate_ks)
+        if self.async_policy and self.policy_executor is not None:
+            st.pending_policy_future = self.policy_executor.submit(
+                self._learned_choose_async,
+                snap,
+                control_snapshot,
+                candidate_ks,
+                max_k,
+                bool(self.learned_trace_scores),
+            )
+            st.pending_policy_submit_block = int(st.n_blocks)
+            st.last_policy_submit_block = int(st.n_blocks)
+            return {
+                "learned_policy_used": False,
+                "policy_runtime_ms": 0.0,
+                "candidate_scores": None,
+                "policy_error": f"async_policy_submitted_every_{self.learned_every_n}",
+            }
+
+        t0 = time.perf_counter()
+        try:
+            res = self._learned_choose_async(
+                snap,
+                control_snapshot,
+                candidate_ks,
+                max_k,
+                bool(self.learned_trace_scores),
+            )
+            st.next_k = self._clip(int(res["chosen_k"]), max_k)
+            st.last_policy_submit_block = int(st.n_blocks)
+            st.last_policy_apply_block = int(st.n_blocks)
+            return {
+                "learned_policy_used": True,
+                "policy_runtime_ms": float((time.perf_counter() - t0) * 1000.0),
+                "candidate_scores": res.get("candidate_scores", None),
+                "policy_error": "sync_policy_debug_path",
+            }
+        except Exception as e:
+            return {
+                "learned_policy_used": False,
+                "policy_runtime_ms": None,
+                "candidate_scores": None,
+                "policy_error": repr(e),
+            }
 
     def _trace(self, obj: dict):
         if self.trace_f is not None:

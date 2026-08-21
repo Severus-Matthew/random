@@ -233,7 +233,7 @@ def build_spec_config(method: str, k: int,
     if method == "eagle3":
         if not eagle3_model:
             raise ValueError("eagle3 requires --eagle3_model")
-        return {"method": "eagle3", "model": eagle3_model,
+        return {"method": "eagle", "model": eagle3_model,
                 "num_speculative_tokens": k}
     raise ValueError(f"Unknown method: {method}")
 
@@ -494,6 +494,29 @@ def build_multiturn_prompt(history: List[Dict], tokenizer) -> str:
 
 
 # ── Single inference call with full metric extraction ─────────────────────
+def format_prompt_for_mode(prompt: str, tokenizer, prompt_mode: str) -> str:
+    if prompt_mode == "raw":
+        return prompt
+
+    if prompt_mode == "qwen3_chat_no_think":
+        messages = [{"role": "user", "content": prompt}]
+        try:
+            return tokenizer.apply_chat_template(
+                messages,
+                tokenize=False,
+                add_generation_prompt=True,
+                enable_thinking=False,
+            )
+        except TypeError:
+            return tokenizer.apply_chat_template(
+                messages,
+                tokenize=False,
+                add_generation_prompt=True,
+            )
+
+    raise ValueError(f"Unknown prompt_mode: {prompt_mode}")
+
+
 def run_one(llm, tokenizer, prompt: str, sp, method: str, k: int) -> Dict:
     # snapshot cumulative counters before generate
     before = snapshot_before(llm) if method != "ar" else {}
@@ -639,6 +662,9 @@ def main():
     # method
     ap.add_argument("--method",        default="eagle3",
                     choices=["ar","ngram_sd","draft_sd","eagle3"])
+    ap.add_argument("--prompt_mode", default="raw",
+                    choices=["raw", "qwen3_chat_no_think"],
+                    help="Prompt formatting mode. qwen3_chat_no_think applies Qwen chat template with thinking disabled when supported.")
     ap.add_argument("--k",             type=int,   default=4)
     ap.add_argument("--ngram_lookup_min", type=int, default=1)
     ap.add_argument("--ngram_lookup_max", type=int, default=4)
@@ -920,7 +946,8 @@ def main():
                 trace["entropy_trend"]        = float(np.nanmean([t.get("entropy_trend",       float("nan")) for t in all_turn_traces]))
                 trace["num_turns_completed"]  = len(all_turn_traces)
             else:
-                trace = run_one(llm, tokenizer, base_prompt, sp, args.method, args.k)
+                final_prompt = format_prompt_for_mode(base_prompt, tokenizer, args.prompt_mode)
+                trace = run_one(llm, tokenizer, final_prompt, sp, args.method, args.k)
                 trace["num_turns_completed"] = 1
 
             # After first generate, re-dump with live metrics

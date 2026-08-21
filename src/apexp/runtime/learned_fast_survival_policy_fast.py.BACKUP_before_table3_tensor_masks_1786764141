@@ -254,105 +254,6 @@ class FastLearnedSurvivalPolicy:
 
         return out
 
-
-    def _apply_apexp_tensor_feature_ablation_masks(self, x_num):
-        """
-        Runtime feature masking for fast no-Pandas APEX controller.
-
-        This operates on raw numeric features before normalization.
-        It only activates when the corresponding APEXP_ABLATE_* env flag is set.
-        """
-        import os
-        import numpy as np
-
-        mask_cols = []
-
-        def add_matching(substrs):
-            added = []
-            for j, col in enumerate(self.num_cols):
-                cl = str(col).lower()
-
-                # Never mask candidate depth itself.
-                if cl in {"k", "candidate_k", "active_k", "k_requested", "target_k_actual"}:
-                    continue
-
-                if any(s in cl for s in substrs):
-                    added.append((j, col))
-            mask_cols.extend(added)
-
-        if os.environ.get("APEXP_ABLATE_ENTROPY", "0") == "1":
-            add_matching([
-                "entropy",
-                "token_entropy",
-                "prefix_entropy",
-                "mean_entropy",
-                "entropy_trend",
-                "entropy_range",
-                "high_entropy_frac",
-            ])
-
-        if os.environ.get("APEXP_ABLATE_REPETITION", "0") == "1":
-            add_matching([
-                "repeat",
-                "repetition",
-                "rep_density",
-                "repetition_density",
-                "ngram_repeat",
-            ])
-
-        if os.environ.get("APEXP_ABLATE_VERIFIER_HISTORY", "0") == "1":
-            add_matching([
-                "hist_",
-                "history",
-                "rolling",
-                "ema",
-                "recent",
-                "prev_",
-                "previous",
-                "last_",
-                "blocks_seen",
-                "observed",
-                "num_obs",
-                "n_obs",
-                "accepted_so_far",
-                "rejected_so_far",
-                "draft_so_far",
-                "accept_rate_so_far",
-                "waste_rate_so_far",
-                "mean_accepted",
-                "mean_rejected",
-                "mean_draft",
-                "accepted_per_block",
-                "prefix_pos",
-                "prefix_frac",
-            ])
-
-        # Deduplicate while preserving order.
-        seen = set()
-        mask_cols = [(j, c) for j, c in mask_cols if not ((j, c) in seen or seen.add((j, c)))]
-
-        if mask_cols:
-            out = np.array(x_num, copy=True)
-            for j, _ in mask_cols:
-                out[:, j] = 0.0
-
-            if not getattr(self, "_apexp_printed_tensor_feature_ablation_masks", False):
-                print(
-                    "[APEX tensor feature ablation] "
-                    f"entropy={os.environ.get('APEXP_ABLATE_ENTROPY','0')} "
-                    f"repetition={os.environ.get('APEXP_ABLATE_REPETITION','0')} "
-                    f"verifier_history={os.environ.get('APEXP_ABLATE_VERIFIER_HISTORY','0')} "
-                    f"masked_cols={[c for _, c in mask_cols][:120]} "
-                    f"n_masked={len(mask_cols)}",
-                    flush=True,
-                )
-                self._apexp_printed_tensor_feature_ablation_masks = True
-
-            return out
-
-        return x_num
-
-
     def _make_tensors(
         self,
         st: Any,
@@ -386,7 +287,6 @@ class FastLearnedSurvivalPolicy:
 
             x_num[:, j] = vals
 
-        x_num = self._apply_apexp_tensor_feature_ablation_masks(x_num)
         x_num = (x_num - self._num_mean[None, :]) / self._num_std[None, :]
 
         xb_num = torch.as_tensor(x_num, dtype=torch.float32, device=self.device)
