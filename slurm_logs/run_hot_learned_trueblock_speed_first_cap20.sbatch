@@ -2,11 +2,9 @@
 #SBATCH --job-name=apex_hot_trueblk20
 #SBATCH --output=slurm_logs/apex_hot_trueblk20_%j.out
 #SBATCH --error=slurm_logs/apex_hot_trueblk20_%j.err
-#SBATCH --partition=ml-p5en-48xlarge-us-west-2d-tp-p5en-agentcore-eval40
+#SBATCH --partition=dev
 #SBATCH --gres=gpu:6
 #SBATCH --cpus-per-task=48
-#SBATCH --mem=420G
-#SBATCH --time=08:00:00
 
 set -euo pipefail
 

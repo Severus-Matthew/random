@@ -1,0 +1,86 @@
+--- src/phase2_workload_characterization/run_benchmark.py	2026-06-29 22:01:37.000000000 +0000
++++ /workspace/apex_final_overlay/src/phase2_workload_characterization/run_benchmark.py	2026-06-29 23:53:45.044658503 +0000
+@@ -19,6 +19,18 @@
+ import os
+ os.environ.setdefault("VLLM_WORKER_MULTIPROC_METHOD", "spawn")
+ 
++# APEX Layer 0 request-level survival logging.
++# This imports src/phase3_apex/layer0_runtime.py when present.
++import sys
++_PHASE3_APEX_DIR = Path(__file__).resolve().parents[1] / "phase3_apex"
++if _PHASE3_APEX_DIR.exists() and str(_PHASE3_APEX_DIR) not in sys.path:
++    sys.path.insert(0, str(_PHASE3_APEX_DIR))
++try:
++    from layer0_runtime import enrich_record_with_layer0_survival, append_layer0_jsonl
++except Exception as _apex_import_error:  # keep benchmark runnable without APEX files
++    enrich_record_with_layer0_survival = None
++    append_layer0_jsonl = None
++
+ 
+ # ── Reproducibility ───────────────────────────────────────────────────────
+ def set_seed(seed: int):
+@@ -166,7 +178,14 @@
+         stats["accepted_per_draft"] = accepted / max(num_drafts, 1)
+         stats["acceptance_metrics_source"] = "real"
+         for i, v in enumerate(pp_delta):
+-            stats[f"accept_rate_pos_{i}"] = v / max(num_drafts, 1)
++            # vLLM reports accepted tokens per draft position. Dividing by
++            # num_drafts gives S_i = P(positions 0..i all survive), not the
++            # conditional p_i. APEX Layer 0 converts S_i -> p_i,h_i,PMF.
++            stats[f"accept_count_pos_{i}"] = float(v)
++            stats[f"survival_pos_{i}"] = float(v) / max(num_drafts, 1)
++            # Keep old column name for backward compatibility; APEX treats it
++            # as survival S_i, not conditional p_i.
++            stats[f"accept_rate_pos_{i}"] = float(v) / max(num_drafts, 1)
+ 
+     # ── Latency breakdown (from engine histograms — more accurate than perf_counter) ──
+     for key, name in HISTOGRAM_METRICS.items():
+@@ -576,10 +595,14 @@
+         "acceptance_metrics_source": real_stats.get("acceptance_metrics_source", "unavailable"),
+         # per-position acceptance profile
+         "accepted_per_draft":  real_stats.get("accepted_per_draft",  float("nan")),
++        # Backward-compatible fixed columns used by old aggregators.
+         "accept_rate_pos_0":   real_stats.get("accept_rate_pos_0",   float("nan")),
+         "accept_rate_pos_1":   real_stats.get("accept_rate_pos_1",   float("nan")),
+         "accept_rate_pos_2":   real_stats.get("accept_rate_pos_2",   float("nan")),
+         "accept_rate_pos_3":   real_stats.get("accept_rate_pos_3",   float("nan")),
++        # Full dynamic positional counters for APEX Layer 0.
++        **{kk: vv for kk, vv in real_stats.items()
++           if kk.startswith(("accept_rate_pos_", "survival_pos_", "accept_count_pos_"))},
+         # structural
+         "mean_entropy":          mean_ent,
+         "entropy":               entropies,
+@@ -994,13 +1017,27 @@
+                 "oracle_expected_tokens": trace.get("oracle_expected_tokens", float("nan")),
+                 "oracle_k_vs_k4_gain":    trace.get("oracle_k_vs_k4_gain",    float("nan")),
+             }
++            # Add all dynamic vLLM positional counters beyond the old fixed 0..3 columns.
++            for _kk, _vv in trace.items():
++                if str(_kk).startswith(("accept_rate_pos_", "survival_pos_", "accept_count_pos_")):
++                    rec[_kk] = _vv
++
++            # APEX Layer 0 request-level survival enrichment.
++            # This turns vLLM positional survival S_j into conditional p_j, hazard h_j,
++            # and accepted-length PMF components for Layer 1 analysis.
++            if enrich_record_with_layer0_survival is not None:
++                rec = enrich_record_with_layer0_survival(rec, max_depth=args.k if args.method != "ar" else None)
+             summary_rows.append(rec)
+-            tf.write(json.dumps({**rec,
+-                                  "token_ids":    trace["token_ids"],
+-                                  "entropy":      trace["entropy"],
+-                                  "accepted":     trace["accepted"],
+-                                  "rejected":     trace["rejected"],
+-                                  "text":         trace["text"]}) + "\n")
++
++            trace_payload = {**rec,
++                             "token_ids":    trace["token_ids"],
++                             "entropy":      trace["entropy"],
++                             "accepted":     trace["accepted"],
++                             "rejected":     trace["rejected"],
++                             "text":         trace["text"]}
++            tf.write(json.dumps(trace_payload) + "\n")
++            if append_layer0_jsonl is not None:
++                append_layer0_jsonl(out_dir / "apex_layer0_request.jsonl", trace_payload)
+ 
+     pd.DataFrame(summary_rows).to_csv(out_dir / "summary.csv", index=False)
+     print(f"[DONE] {out_dir}  ({len(summary_rows)} rows)")

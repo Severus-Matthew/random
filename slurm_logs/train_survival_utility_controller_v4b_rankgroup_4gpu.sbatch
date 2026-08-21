@@ -2,11 +2,9 @@
 #SBATCH --job-name=apex_fast_v4b4
 #SBATCH --output=slurm_logs/apex_fast_v4b4_%j.out
 #SBATCH --error=slurm_logs/apex_fast_v4b4_%j.err
-#SBATCH --partition=ml-p5en-48xlarge-us-west-2d-tp-p5en-agentcore-eval40
+#SBATCH --partition=dev
 #SBATCH --gres=gpu:6
 #SBATCH --cpus-per-task=64
-#SBATCH --mem=480G
-#SBATCH --time=72:00:00
 
 set -euo pipefail
 

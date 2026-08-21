@@ -3,11 +3,9 @@
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=48
 #SBATCH --gres=gpu:6
-#SBATCH --mem=0
-#SBATCH --time=10:00:00
 #SBATCH --output=slurm_logs/%x_%j.out
 #SBATCH --error=slurm_logs/%x_%j.err
-#SBATCH --partition=ml-p5en-48xlarge-us-west-2d-tp-p5en-agentcore-eval40 # Partition (queue) name
+#SBATCH --partition=dev # Partition (queue) name
 
 
 

@@ -1,0 +1,1 @@
+{"accept_probs": [0.8, 0.7, 0.5, 0.2], "draft_len": 4, "first_rejection": 2, "input_ids": [101, 102, 103], "metadata": {"source": "sample"}, "regime": [1.0, 0.0, 0.0], "target_ids": [201, 202, 203, 204]}

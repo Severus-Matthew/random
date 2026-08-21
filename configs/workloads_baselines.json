@@ -1,0 +1,37 @@
+{
+  "code_gen": {
+    "benchmarks": ["HumanEval", "MBPP"],
+    "dataset_hf": ["openai/openai_humaneval", "google-research-datasets/mbpp"],
+    "prompt_field_candidates": ["prompt", "question", "problem", "text"]
+  },
+  "long_horizon_swe": {
+    "benchmarks": ["SWE-bench Lite"],
+    "dataset_hf": ["princeton-nlp/SWE-bench_Lite"],
+    "prompt_field_candidates": ["problem_statement", "text", "prompt"]
+  },
+  "hardware_gen": {
+    "benchmarks": ["VerilogEval"],
+    "dataset_hf": ["dakies/nvlabs-verilogeval-v2-spec-to-rtl"],
+    "prompt_field_candidates": ["prompt", "instruction", "problem", "spec", "description"]
+  },
+  "mathematical_reasoning": {
+    "benchmarks": ["GSM8K", "AIME"],
+    "dataset_hf": ["openai/gsm8k", "Maxwell-Jia/AIME_2024"],
+    "prompt_field_candidates": ["question", "problem", "prompt"]
+  },
+  "long_chain_reasoning": {
+    "benchmarks": ["MATH", "GPQA"],
+    "dataset_hf": ["EleutherAI/hendrycks_math", "Idavidrein/gpqa"],
+    "prompt_field_candidates": ["problem", "Question", "question", "prompt"]
+  },
+  "long_context_completion": {
+    "benchmarks": ["Repository-level code completion"],
+    "dataset_hf": ["bigcode/the-stack-smol"],
+    "prompt_field_candidates": ["content", "code","text"]
+  },
+  "conversational_generation": {
+    "benchmarks": ["Dialogue benchmarks"],
+    "dataset_hf": ["HuggingFaceH4/ultrachat_200k"],
+    "prompt_field_candidates": ["messages", "prompt", "text"]
+  }
+}

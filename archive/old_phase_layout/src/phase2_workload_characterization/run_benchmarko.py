@@ -1,0 +1,1010 @@
+#!/usr/bin/env python
+"""
+run_benchmark.py  —  Phase 1 + Phase 2 benchmark harness
+
+New in this version:
+  - Real vLLM spec-decode acceptance metrics (tries multiple engine paths)
+  - Context-length truncation study (--max_prompt_tokens)
+  - Multi-turn chaining (--num_turns)
+  - Temperature is a first-class flag
+  - ngram prompt-lookup window is configurable (--ngram_lookup_min/max)
+  - All metrics are clearly tagged as 'real' or 'proxy'
+"""
+import argparse, json, time, math, os, random
+from pathlib import Path
+from typing import Dict, Any, List, Optional
+import numpy as np
+import pandas as pd
+from tqdm import tqdm
+import os
+os.environ.setdefault("VLLM_WORKER_MULTIPROC_METHOD", "spawn")
+
+
+# ── Reproducibility ───────────────────────────────────────────────────────
+def set_seed(seed: int):
+    random.seed(seed)
+    np.random.seed(seed)
+    try:
+        import torch
+        torch.manual_seed(seed)
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed_all(seed)
+    except ImportError:
+        pass
+
+
+# ── vLLM spec-decode stats extraction ─────────────────────────────────────
+# get_metrics() returns a flat list of Counter/Gauge/Vector objects.
+# Counters are cumulative — we snapshot before/after each generate() call
+# and diff to get per-request values.
+
+# ── vLLM spec-decode stats extraction ─────────────────────────────────────
+# get_metrics() returns a flat list of Counter/Gauge/Histogram/Vector objects.
+# Counters are cumulative — snapshot before/after each generate() and diff.
+
+SPEC_METRIC_NAMES = {
+    "num_drafts":    "vllm:spec_decode_num_drafts",
+    "draft_tokens":  "vllm:spec_decode_num_draft_tokens",
+    "accepted":      "vllm:spec_decode_num_accepted_tokens",
+    "per_pos":       "vllm:spec_decode_num_accepted_tokens_per_pos",
+}
+
+# All cumulative counter/histogram names we want to delta
+ALL_COUNTER_METRICS = {
+    # spec decode
+    "num_drafts":           "vllm:spec_decode_num_drafts",
+    "draft_tokens":         "vllm:spec_decode_num_draft_tokens",
+    "accepted_tokens":      "vllm:spec_decode_num_accepted_tokens",
+    # prefix cache
+    "prefix_cache_queries": "vllm:prefix_cache_queries",
+    "prefix_cache_hits":    "vllm:prefix_cache_hits",
+    # token counts
+    "prompt_tokens":        "vllm:prompt_tokens",
+    "generation_tokens":    "vllm:generation_tokens",
+    "prompt_tokens_cached": "vllm:prompt_tokens_cached",
+    # compute cost
+    "flops_per_gpu":        "vllm:estimated_flops_per_gpu",
+    "read_bytes_per_gpu":   "vllm:estimated_read_bytes_per_gpu",
+    "write_bytes_per_gpu":  "vllm:estimated_write_bytes_per_gpu",
+    # finish reasons (for output distribution analysis)
+    "finished_stop":        "vllm:request_success",       # needs label filter
+    "num_preemptions":      "vllm:num_preemptions",
+}
+
+# Histogram metrics — we want .sum and .count for mean computation
+HISTOGRAM_METRICS = {
+    "ttft_s":           "vllm:time_to_first_token_seconds",
+    "itl_s":            "vllm:inter_token_latency_seconds",
+    "e2e_latency_s":    "vllm:e2e_request_latency_seconds",
+    "prefill_time_s":   "vllm:request_prefill_time_seconds",
+    "decode_time_s":    "vllm:request_decode_time_seconds",
+    "tpot_s":           "vllm:request_time_per_output_token_seconds",
+    "iter_tokens":      "vllm:iteration_tokens_total",
+}
+
+
+def _get_metrics_dict(llm):
+    """Return {name: item} from engine.get_metrics(), or {} on failure."""
+    try:
+        items = llm.llm_engine.get_metrics()
+        if isinstance(items, list):
+            # For metrics with labels (like request_success), keep first match by name
+            d = {}
+            for item in items:
+                if item.name not in d:
+                    d[item.name] = item
+            return d
+    except Exception:
+        pass
+    return {}
+
+
+def snapshot_before(llm) -> Dict:
+    """Snapshot all cumulative counters and histogram sums before generate()."""
+    m = _get_metrics_dict(llm)
+    snap: Dict = {}
+    # counters
+    for key, name in ALL_COUNTER_METRICS.items():
+        item = m.get(name)
+        snap[key] = float(getattr(item, "value", 0) or 0) if item else 0.0
+    # per-position vector
+    pp = m.get(SPEC_METRIC_NAMES["per_pos"])
+    snap["per_pos"] = list(getattr(pp, "values", []) or []) if pp else []
+    # histograms (sum + count)
+    for key, name in HISTOGRAM_METRICS.items():
+        item = m.get(name)
+        snap[f"{key}_sum"]   = float(getattr(item, "sum",   0) or 0) if item else 0.0
+        snap[f"{key}_count"] = float(getattr(item, "count", 0) or 0) if item else 0.0
+    # gauge (instantaneous — no delta needed)
+    kv = m.get("vllm:kv_cache_usage_perc")
+    snap["kv_cache_usage_perc"] = float(getattr(kv, "value", float("nan")) or float("nan")) if kv else float("nan")
+    return snap
+
+
+def extract_delta_stats(llm, before: Dict) -> Dict[str, float]:
+    """
+    Diff cumulative counters and histogram sums to get per-request stats.
+    Returns spec decode, latency breakdown, cache, and compute metrics.
+    """
+    stats: Dict[str, float] = {}
+    if not before:
+        return stats
+    m = _get_metrics_dict(llm)
+    if not m:
+        return stats
+
+    def dv(key, name):
+        item = m.get(name)
+        after = float(getattr(item, "value", 0) or 0) if item else 0.0
+        return max(0.0, after - float(before.get(key, 0)))
+
+    def dh(key, name):
+        """Delta of histogram sum and count."""
+        item = m.get(name)
+        a_sum   = float(getattr(item, "sum",   0) or 0) if item else 0.0
+        a_count = float(getattr(item, "count", 0) or 0) if item else 0.0
+        d_sum   = max(0.0, a_sum   - before.get(f"{key}_sum",   0))
+        d_count = max(0.0, a_count - before.get(f"{key}_count", 0))
+        return d_sum, d_count
+
+    # ── Spec decode ───────────────────────────────────────────────────────
+    num_drafts   = dv("num_drafts",    ALL_COUNTER_METRICS["num_drafts"])
+    draft_tokens = dv("draft_tokens",  ALL_COUNTER_METRICS["draft_tokens"])
+    accepted     = dv("accepted_tokens", ALL_COUNTER_METRICS["accepted_tokens"])
+
+    pp_item  = m.get(SPEC_METRIC_NAMES["per_pos"])
+    pp_after = list(getattr(pp_item, "values", []) or []) if pp_item else []
+    pp_before= list(before.get("per_pos", []))
+    pp_delta = [max(0, a - b) for a, b in
+                zip(pp_after, pp_before + [0]*max(0, len(pp_after)-len(pp_before)))]
+
+    if draft_tokens > 0:
+        stats["acceptance_rate"]    = accepted / draft_tokens
+        stats["draft_tokens"]       = draft_tokens
+        stats["accepted_tokens"]    = accepted
+        stats["num_drafts"]         = num_drafts
+        stats["accepted_per_draft"] = accepted / max(num_drafts, 1)
+        stats["acceptance_metrics_source"] = "real"
+        for i, v in enumerate(pp_delta):
+            stats[f"accept_rate_pos_{i}"] = v / max(num_drafts, 1)
+
+    # ── Latency breakdown (from engine histograms — more accurate than perf_counter) ──
+    for key, name in HISTOGRAM_METRICS.items():
+        d_sum, d_count = dh(key, name)
+        stats[f"{key}_mean"] = d_sum / d_count if d_count > 0 else float("nan")
+        stats[f"{key}_sum"]  = d_sum
+        stats[f"{key}_count"]= d_count
+
+    # ── Prefix cache ──────────────────────────────────────────────────────
+    pc_q = dv("prefix_cache_queries", ALL_COUNTER_METRICS["prefix_cache_queries"])
+    pc_h = dv("prefix_cache_hits",    ALL_COUNTER_METRICS["prefix_cache_hits"])
+    stats["prefix_cache_queries"]  = pc_q
+    stats["prefix_cache_hits"]     = pc_h
+    stats["prefix_cache_hit_rate"] = pc_h / pc_q if pc_q > 0 else 0.0
+
+    # cached prompt tokens fraction
+    pt    = dv("prompt_tokens",        ALL_COUNTER_METRICS["prompt_tokens"])
+    pt_c  = dv("prompt_tokens_cached", ALL_COUNTER_METRICS["prompt_tokens_cached"])
+    stats["prompt_tokens"]         = pt
+    stats["prompt_tokens_cached"]  = pt_c
+    stats["prompt_cache_frac"]     = pt_c / pt if pt > 0 else 0.0
+
+    # ── Compute cost ──────────────────────────────────────────────────────
+    stats["flops_per_gpu"]      = dv("flops_per_gpu",      ALL_COUNTER_METRICS["flops_per_gpu"])
+    stats["read_bytes_per_gpu"] = dv("read_bytes_per_gpu", ALL_COUNTER_METRICS["read_bytes_per_gpu"])
+
+    # ── KV cache (instantaneous gauge) ───────────────────────────────────
+    kv = m.get("vllm:kv_cache_usage_perc")
+    stats["kv_cache_usage_perc"] = float(getattr(kv, "value", float("nan")) or float("nan")) if kv else float("nan")
+
+    return stats
+
+
+# Keep old name as alias
+def extract_vllm_spec_stats(llm) -> Dict[str, float]:
+    snap = snapshot_before(llm)
+    return extract_delta_stats(llm, snap)
+
+
+
+
+
+
+# ── Speculative config builder ─────────────────────────────────────────────
+def build_spec_config(method: str, k: int,
+                      draft_model: str = "",
+                      eagle3_model: str = "",
+                      ngram_lookup_min: int = 1,
+                      ngram_lookup_max: int = 4) -> Optional[Dict]:
+    if method == "ar":
+        return None
+    if method == "ngram_sd":
+        return {
+            "method": "ngram",
+            "num_speculative_tokens": k,
+            "prompt_lookup_min": ngram_lookup_min,
+            "prompt_lookup_max": ngram_lookup_max,  # Fix: use exact config value, do not override with k
+        }
+    if method == "draft_sd":
+        if not draft_model:
+            raise ValueError("draft_sd requires --draft_model")
+        return {"method": "draft_model", "model": draft_model,
+                "num_speculative_tokens": k}
+    if method == "eagle3":
+        if not eagle3_model:
+            raise ValueError("eagle3 requires --eagle3_model")
+        return {"method": "eagle3", "model": eagle3_model,
+                "num_speculative_tokens": k}
+    raise ValueError(f"Unknown method: {method}")
+
+
+# ── Entropy from logprobs ──────────────────────────────────────────────────
+def approx_entropy(step_logprobs) -> float:
+    if not step_logprobs:
+        return float("nan")
+    vals = []
+    for lp in step_logprobs.values():
+        if hasattr(lp, "logprob"):       vals.append(lp.logprob)
+        elif isinstance(lp, dict):       vals.append(lp.get("logprob", float("nan")))
+        elif isinstance(lp, (float,int)):vals.append(float(lp))
+    if not vals:
+        return float("nan")
+    probs = np.exp(np.array(vals) - np.max(vals))
+    probs /= probs.sum()
+    return float(-(probs * np.log(probs + 1e-12)).sum())
+
+
+# ── Structural metrics ─────────────────────────────────────────────────────
+def repetition_density(ids: List[int], window: int = 32) -> float:
+    if len(ids) < 2: return 0.0
+    hits = sum(1 for i in range(1, len(ids)) if ids[i] in ids[max(0,i-window):i])
+    return hits / (len(ids) - 1)
+
+def acceptance_volatility(accepted: List[float]) -> float:
+    clean = [x for x in accepted if not (isinstance(x,float) and math.isnan(x))]
+    return float(np.std(clean)) if len(clean) >= 2 else float("nan")
+
+def rejection_locality(rejected: List[int], window: int = 16) -> float:
+    if not rejected or sum(rejected) == 0: return float("nan")
+    pos = [i for i,r in enumerate(rejected) if r]
+    if len(pos) < 2: return 0.0
+    clustered = sum(1 for idx,p in enumerate(pos)
+                    if any(abs(p-n) <= window
+                           for n in pos[max(0,idx-1):idx] + pos[idx+1:idx+2]))
+    return clustered / len(pos)
+
+def verifier_utilization(n: int, k: int, method: str) -> float:
+    if method == "ar" or k <= 0: return 1.0
+    return math.ceil(n / max(1,k)) / max(1, n)
+
+def rollback_frequency(rejected: List[int], k: int) -> float:
+    if not rejected or k <= 0: return float("nan")
+    n_w = math.ceil(len(rejected) / max(1,k))
+    if n_w == 0: return float("nan")
+    rb = sum(1 for w in range(n_w) if any(rejected[w*k:(w+1)*k]))
+    return rb / n_w
+
+
+
+# ── Rejection analysis ─────────────────────────────────────────────────────
+def compute_rejection_metrics(
+    real_stats: Dict[str, float],
+    k: int,
+    method: str,
+) -> Dict[str, float]:
+    """
+    Full rejection characterization from positional acceptance counters.
+
+    Metrics produced:
+      rejected_tokens         absolute draft tokens rejected this request
+      rejection_rate          rejected_tokens / draft_tokens
+      first_rejection_pos     first draft position where accept_rate < 0.5
+      rejection_concentration std of per-position rejection rates
+                              (high = rejections clustered at specific positions)
+      rejection_severity      rejection rate at position 0
+                              (how often does the very first draft token fail?)
+      acceptance_decay_slope  linear slope of accept_rate across positions
+                              (always negative; steeper = faster decay)
+    """
+    out: Dict[str, float] = {
+        "rejected_tokens":          float("nan"),
+        "rejection_rate":           float("nan"),
+        "first_rejection_pos":      float("nan"),
+        "rejection_concentration":  float("nan"),
+        "rejection_severity":       float("nan"),
+        "acceptance_decay_slope":   float("nan"),
+    }
+    if method == "ar":
+        return out
+
+    draft_t  = real_stats.get("draft_tokens",    float("nan"))
+    accept_t = real_stats.get("accepted_tokens", float("nan"))
+    if math.isfinite(draft_t) and draft_t > 0 and math.isfinite(accept_t):
+        rejected = max(0.0, draft_t - accept_t)
+        out["rejected_tokens"] = rejected
+        out["rejection_rate"]  = rejected / draft_t
+
+    # Per-position data — collect accept_rate at each draft slot
+    pos_accept = []
+    for i in range(min(k, 16)):
+        val = real_stats.get(f"accept_rate_pos_{i}", float("nan"))
+        if math.isfinite(val):
+            pos_accept.append((i, val))
+
+    if pos_accept:
+        # First rejection position: first pos where accept_rate < 0.5
+        first_rej = next((float(i) for i, ar in pos_accept if ar < 0.5), float("nan"))
+        out["first_rejection_pos"] = first_rej
+
+        # Rejection rates per position
+        rej_rates = [1.0 - ar for _, ar in pos_accept]
+        if len(rej_rates) > 1:
+            out["rejection_concentration"] = float(np.std(rej_rates))
+
+        # Severity = rejection rate at position 0
+        if pos_accept[0][0] == 0:
+            out["rejection_severity"] = 1.0 - pos_accept[0][1]
+
+        # Decay slope: linear fit on accept_rates across positions
+        if len(pos_accept) > 1:
+            positions = np.array([i for i, _ in pos_accept], dtype=float)
+            rates     = np.array([ar for _, ar in pos_accept], dtype=float)
+            out["acceptance_decay_slope"] = float(np.polyfit(positions, rates, 1)[0])
+
+    return out
+
+
+# ── Intra-sequence window analysis ─────────────────────────────────────────
+def compute_window_metrics(entropies: List[float], n_windows: int = 3) -> Dict[str, float]:
+    """
+    Split generation into n_windows equal windows and compute per-window entropy.
+
+    This reveals intra-sequence regime transitions:
+      - Decreasing entropy (negative trend): generation settling into repetitive
+        pattern → safe to increase k as sequence progresses
+      - Increasing entropy (positive trend): generation becoming more complex
+        → adaptive controller should decrease k in later windows
+      - Bimodal pattern (low w0, high w1, low w2): transition zones require
+        the most careful k management
+
+    Returns:
+      entropy_w{i}_mean  mean entropy in window i
+      entropy_trend      linear slope (nats/token) — key adaptive signal
+      entropy_range      max - min entropy (variance of difficulty)
+      high_entropy_frac  fraction of tokens with entropy > 0.5
+    """
+    out = {f"entropy_w{i}_mean": float("nan") for i in range(n_windows)}
+    out.update({"entropy_trend": float("nan"),
+                "entropy_range": float("nan"),
+                "high_entropy_frac": float("nan")})
+
+    clean = [e for e in entropies if math.isfinite(e)]
+    if not clean:
+        return out
+
+    n = len(clean)
+    ws = max(1, n // n_windows)
+    for i in range(n_windows):
+        s = i * ws
+        e = s + ws if i < n_windows - 1 else n
+        w = clean[s:e]
+        if w:
+            out[f"entropy_w{i}_mean"] = float(np.mean(w))
+
+    if n > 1:
+        out["entropy_trend"] = float(np.polyfit(range(n), clean, 1)[0])
+    out["entropy_range"]       = float(max(clean) - min(clean))
+    out["high_entropy_frac"]   = float(sum(1 for e in clean if e > 0.5) / n)
+    return out
+
+
+# ── Entropy bucket classification ──────────────────────────────────────────
+def classify_entropy_bucket(mean_entropy: float) -> str:
+    """
+    Classify generation into a token regime bucket.
+    Thresholds from Phase 1 workload characterization:
+      low    < 0.15  (long-chain/long-context style)
+      medium 0.15–0.35 (code/math style)
+      high   ≥ 0.35  (conversational style)
+    """
+    if not math.isfinite(mean_entropy):
+        return "unknown"
+    if mean_entropy < 0.15:
+        return "low"
+    elif mean_entropy < 0.35:
+        return "medium"
+    return "high"
+
+
+# ── Oracle k estimation ─────────────────────────────────────────────────────
+def estimate_oracle_k(
+    real_stats: Dict[str, float],
+    mean_entropy: float,
+    available_ks: List[int] = [1, 2, 4, 8, 16],
+) -> Dict[str, Any]:
+    """
+    Estimate retrospective oracle-optimal k from per-position acceptance data.
+
+    The oracle maximises expected_accepted_tokens(k):
+      E[accepted | k] = sum_{i=0}^{k-1} prod_{j=0}^{i} accept_rate_pos_j
+
+    This is the expected number of tokens accepted before the first rejection
+    and captures the diminishing-return tradeoff: extending k adds one more
+    accepted token only if all preceding positions were also accepted.
+
+    If per-position data is unavailable, falls back to entropy-based estimate
+    using the empirical r = -0.893 relationship from Phase 1.
+
+    Returns:
+      oracle_k_estimated     k that maximises E[accepted]
+      oracle_expected_tokens E[accepted] at oracle k
+      oracle_k_vs_k4_gain    E[accepted|oracle_k] - E[accepted|k=4]
+                             (positive = oracle beats fixed k=4)
+    """
+    # Build per-position acceptance rate array
+    pos_rates = {}
+    for i in range(max(available_ks)):
+        val = real_stats.get(f"accept_rate_pos_{i}", float("nan"))
+        if math.isfinite(val):
+            pos_rates[i] = val
+
+    if not pos_rates:
+        # Entropy-based fallback: geometric decay model
+        ar_est = max(0.05, min(0.95, 1.0 - 2.0 * mean_entropy))                  if math.isfinite(mean_entropy) else 0.5
+        pos_rates = {i: ar_est * (0.82 ** i) for i in range(max(available_ks))}
+
+    max_pos = max(pos_rates.keys())
+    expected_by_k = {}
+    for k in available_ks:
+        cum = 1.0
+        exp = 0.0
+        for i in range(k):
+            ar_i = pos_rates.get(i, pos_rates.get(min(i, max_pos), 0.1))
+            cum *= ar_i
+            exp += cum
+        expected_by_k[k] = exp
+
+    best_k = max(expected_by_k, key=expected_by_k.get)
+    return {
+        "oracle_k_estimated":    best_k,
+        "oracle_expected_tokens": expected_by_k[best_k],
+        "oracle_k_vs_k4_gain":   expected_by_k[best_k] - expected_by_k.get(4, 0.0),
+    }
+
+# ── Prompt helpers ─────────────────────────────────────────────────────────
+def truncate_prompt(prompt: str, tokenizer, max_tokens: int) -> str:
+    """Truncate prompt to at most max_tokens tokens."""
+    if max_tokens <= 0:
+        return prompt
+    ids = tokenizer.encode(prompt)
+    if len(ids) <= max_tokens:
+        return prompt
+    return tokenizer.decode(ids[:max_tokens])
+
+
+def build_multiturn_prompt(history: List[Dict], tokenizer) -> str:
+    """Flatten a chat history list into a single string prompt."""
+    parts = []
+    for turn in history:
+        role = turn.get("role", "user")
+        content = turn.get("content", "")
+        parts.append(f"<|{role}|>\n{content}")
+    parts.append("<|assistant|>")
+    return "\n".join(parts)
+
+
+# ── Single inference call with full metric extraction ─────────────────────
+def run_one(llm, tokenizer, prompt: str, sp, method: str, k: int) -> Dict:
+    # snapshot cumulative counters before generate
+    before = snapshot_before(llm) if method != "ar" else {}
+
+    t0 = time.perf_counter()
+    outputs = llm.generate([prompt], sp, use_tqdm=False)
+    latency = time.perf_counter() - t0
+
+    # flush engine stats so histograms are up to date before delta snapshot
+    if method != "ar":
+        try:
+            llm.llm_engine.do_log_stats()
+        except Exception:
+            pass
+
+    # delta gives per-request spec stats
+    real_stats = extract_delta_stats(llm, before) if method != "ar" else {}
+
+    out = outputs[0].outputs[0]
+    token_ids = list(map(int, out.token_ids))
+    n = len(token_ids)
+    logprobs_raw = getattr(out, "logprobs", None) or []
+    entropies = [approx_entropy(logprobs_raw[i]) if i < len(logprobs_raw)
+                 else float("nan") for i in range(n)]
+
+    # Use real acceptance if available, else NaN
+    real_ar = real_stats.get("acceptance_rate", float("nan"))
+    accepted = ([real_ar] * n if math.isfinite(real_ar) else [float("nan")] * n)
+    # NOTE: rejected[] is a placeholder array of zeros.
+    # True per-token rejection positions require instrumenting vLLM internals
+    # (the speculative decode sampler's accept/reject mask), not accessible
+    # without modifying vLLM source code.
+    # The AGGREGATED rejection metrics (rejection_rate, first_rejection_pos,
+    # rejection_concentration etc.) ARE real — derived from vLLM's positional
+    # acceptance counters via extract_delta_stats(). Only this per-token trace
+    # array is a known proxy and should not be used for per-token analysis.
+    rejected = [0] * n
+
+    # Proxy acceptance from real stats if available
+    # accepted_tokens / draft_tokens gives a cleaner signal
+    draft_tokens    = real_stats.get("draft_tokens",    float("nan"))
+    accepted_tokens_total = real_stats.get("accepted_tokens", float("nan"))
+    acceptance_rate = (real_ar if math.isfinite(real_ar)
+                       else (accepted_tokens_total / max(draft_tokens, 1)
+                             if math.isfinite(draft_tokens) and draft_tokens > 0
+                             else float("nan")))
+
+    rep_den  = repetition_density(token_ids)
+    acc_vol  = acceptance_volatility(accepted)
+    rej_loc  = rejection_locality(rejected)
+    ver_util = verifier_utilization(n, k, method)
+    rb_freq  = rollback_frequency(rejected, k)
+
+    verifier_passes       = max(1, math.ceil(n / max(1,k)))
+    accepted_per_vpass    = (accepted_tokens_total / verifier_passes
+                             if math.isfinite(accepted_tokens_total)
+                             else float("nan"))
+
+    mean_ent = float(np.nanmean(entropies)) if entropies else float("nan")
+
+    # ── New Phase 2+ metrics ───────────────────────────────────────────────
+    rej_metrics  = compute_rejection_metrics(real_stats, k, method)
+    win_metrics  = compute_window_metrics(entropies)
+    oracle_stats = estimate_oracle_k(real_stats, mean_ent) if method != "ar" else {}
+
+    return {
+        # provenance
+        "text":           out.text,
+        "token_ids":      token_ids,
+        "token_strings":  [tokenizer.decode([t]) for t in token_ids],
+        # timing
+        "latency_s":      latency,
+        "tokens_per_sec": n / max(latency, 1e-9),
+        "n_output_tokens": n,
+        # acceptance — real values from delta counter diff
+        "acceptance_rate":                   acceptance_rate,
+        "accepted_tokens_per_verifier_pass": accepted_per_vpass,
+        "draft_tokens":   draft_tokens,
+        "accepted_tokens_total": accepted_tokens_total,
+        "acceptance_metrics_source": real_stats.get("acceptance_metrics_source", "unavailable"),
+        # per-position acceptance profile
+        "accepted_per_draft":  real_stats.get("accepted_per_draft",  float("nan")),
+        "accept_rate_pos_0":   real_stats.get("accept_rate_pos_0",   float("nan")),
+        "accept_rate_pos_1":   real_stats.get("accept_rate_pos_1",   float("nan")),
+        "accept_rate_pos_2":   real_stats.get("accept_rate_pos_2",   float("nan")),
+        "accept_rate_pos_3":   real_stats.get("accept_rate_pos_3",   float("nan")),
+        # structural
+        "mean_entropy":          mean_ent,
+        "entropy":               entropies,
+        "repetition_density":    rep_den,
+        "acceptance_volatility": acc_vol,
+        "rejection_locality":    rej_loc,
+        "verifier_utilization":  ver_util,
+        "rollback_frequency":    rb_freq,
+        "accepted":  accepted,
+        "rejected":  rejected,
+        # ── rejection analysis (Phase 2+) ──────────────────────────────
+        "rejected_tokens":          rej_metrics["rejected_tokens"],
+        "rejection_rate":           rej_metrics["rejection_rate"],
+        "first_rejection_pos":      rej_metrics["first_rejection_pos"],
+        "rejection_concentration":  rej_metrics["rejection_concentration"],
+        "rejection_severity":       rej_metrics["rejection_severity"],
+        "acceptance_decay_slope":   rej_metrics["acceptance_decay_slope"],
+        # ── intra-sequence window analysis ─────────────────────────────
+        "entropy_w0_mean":    win_metrics["entropy_w0_mean"],
+        "entropy_w1_mean":    win_metrics["entropy_w1_mean"],
+        "entropy_w2_mean":    win_metrics["entropy_w2_mean"],
+        "entropy_trend":      win_metrics["entropy_trend"],
+        "entropy_range":      win_metrics["entropy_range"],
+        "high_entropy_frac":  win_metrics["high_entropy_frac"],
+        # ── entropy bucket + oracle k ───────────────────────────────────
+        "entropy_bucket":        classify_entropy_bucket(mean_ent),
+        "oracle_k_estimated":    oracle_stats.get("oracle_k_estimated",    float("nan")),
+        "oracle_expected_tokens":oracle_stats.get("oracle_expected_tokens", float("nan")),
+        "oracle_k_vs_k4_gain":   oracle_stats.get("oracle_k_vs_k4_gain",   float("nan")),
+    }
+
+
+# ── Main ──────────────────────────────────────────────────────────────────
+def main():
+    ap = argparse.ArgumentParser()
+    # identity
+    ap.add_argument("--workload",      required=True)
+    ap.add_argument("--run_name",      default=None)
+    ap.add_argument("--experiment",    default="default",
+                    help="Experiment group label (e.g. baseline_sweep, temperature_sweep)")
+    # data
+    ap.add_argument("--input_jsonl",   required=True)
+    ap.add_argument("--limit",         type=int, default=100)
+    ap.add_argument("--max_prompt_tokens", type=int, default=0,
+                    help="Truncate prompts to this many tokens (0=no truncation). For context-growth study.")
+    ap.add_argument("--num_turns",     type=int, default=1,
+                    help="Multi-turn depth: chain output as next-turn context (1=no chaining)")
+    # output
+    ap.add_argument("--out_dir",       required=True)
+    # model
+    ap.add_argument("--model",         default=os.environ.get("TARGET_MODEL", "Qwen/Qwen3-8B"))
+    ap.add_argument("--draft_model",   default=os.environ.get("DRAFT_MODEL",  "Qwen/Qwen2.5-1.5B-Instruct"))
+    ap.add_argument("--eagle3_model",  default=os.environ.get("EAGLE3_MODEL", "RedHatAI/Qwen3-8B-speculator.eagle3"))
+    # method
+    ap.add_argument("--method",        default="eagle3",
+                    choices=["ar","ngram_sd","draft_sd","eagle3"])
+    ap.add_argument("--k",             type=int,   default=4)
+    ap.add_argument("--ngram_lookup_min", type=int, default=1)
+    ap.add_argument("--ngram_lookup_max", type=int, default=4)
+    # sampling
+    ap.add_argument("--max_tokens",    type=int,   default=512)
+    ap.add_argument("--temperature",   type=float, default=0.0)
+    ap.add_argument("--top_p",         type=float, default=1.0)
+    ap.add_argument("--top_logprobs",  type=int,   default=5)
+    ap.add_argument("--tensor_parallel_size",   type=int,   default=int(os.environ.get("TP","1")))
+    ap.add_argument("--gpu_memory_utilization", type=float, default=0.92,
+                    help="vLLM GPU memory fraction. Use 0.80 for draft_sd.")
+    ap.add_argument("--enforce_eager", action="store_true",
+                    help="Disable CUDA-graph capture. Strongly recommended for "
+                         "draft_sd, which crashes with an illegal-memory-access "
+                         "during graph capture on some configs.")
+    ap.add_argument("--seed",          type=int,   default=42)
+    args = ap.parse_args()
+
+    set_seed(args.seed)
+
+    from vllm import LLM, SamplingParams
+    from transformers import AutoTokenizer
+
+    # ── output dir ──
+    run_name = args.run_name or f"{args.workload}"
+    ctx_tag  = f"_ctx{args.max_prompt_tokens}" if args.max_prompt_tokens > 0 else ""
+    turn_tag = f"_t{args.num_turns}" if args.num_turns > 1 else ""
+    temp_tag = f"_temp{args.temperature}"
+    ngram_tag= (f"_lk{args.ngram_lookup_min}-{args.ngram_lookup_max}"
+                if args.method == "ngram_sd" else "")
+    # Fix: include draft/eagle model slug so D_draft_model_sweep
+    # runs with 4 different draft models don't overwrite each other.
+    model_tag = ""
+    if args.method == "draft_sd" and args.draft_model:
+        slug = args.draft_model.split("/")[-1].replace("-", "_")
+        model_tag = f"_draft_{slug}"
+    elif args.method == "eagle3" and args.eagle3_model:
+        slug = args.eagle3_model.split("/")[-1].replace("-", "_")
+        model_tag = f"_eagle_{slug}"
+    out_dir = (Path(args.out_dir) / args.experiment / run_name
+               / args.method / f"k{args.k}{ngram_tag}{temp_tag}{ctx_tag}{turn_tag}{model_tag}")
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    # ── config snapshot ──
+    cfg = vars(args)
+    cfg["run_name"] = run_name
+    with open(out_dir / "config.json", "w") as f:
+        json.dump(cfg, f, indent=2)
+    print("[CONFIG]", json.dumps(cfg))
+
+    # ── load data ──
+    rows = [json.loads(l) for l in open(args.input_jsonl)]
+    random.shuffle(rows)   # shuffle before filtering so we don't always take first N
+    print(f"[DATA] {len(rows)} total prompts loaded from {args.input_jsonl}")
+    # Smart selection happens AFTER tokenizer is initialized (see below)
+
+    # ── build LLM ──
+    spec_cfg = build_spec_config(
+        args.method, args.k, args.draft_model, args.eagle3_model,
+        args.ngram_lookup_min, args.ngram_lookup_max
+    )
+    enforce_eager = args.enforce_eager or (args.method == "draft_sd")
+    gpu_mem = args.gpu_memory_utilization
+    if args.method == "draft_sd" and gpu_mem > 0.80:
+        gpu_mem = 0.75   
+    llm_kwargs = dict(model=args.model,
+                      tensor_parallel_size=args.tensor_parallel_size,
+                      gpu_memory_utilization=gpu_mem,
+                      trust_remote_code=True,
+                      enforce_eager=enforce_eager,
+                      disable_log_stats=False)   # needed to expose get_metrics()
+    if spec_cfg:
+        llm_kwargs["speculative_config"] = spec_cfg
+
+    print(f"[INFO] GPU={os.environ.get('CUDA_VISIBLE_DEVICES','all')} | {llm_kwargs}")
+    llm = None
+    last_err = None
+    for attempt in range(1, 4):
+        try:
+            llm = LLM(**llm_kwargs)
+            break
+        except Exception as e:            # AcceleratorError, EngineDeadError, etc.
+            last_err = e
+            print(f"[WARN] engine build failed (attempt {attempt}/3): "
+                  f"{type(e).__name__}: {str(e)[:200]}")
+            import gc
+            gc.collect()
+            if attempt == 2 and not enforce_eager:
+                # escalate: force eager on the final attempt
+                enforce_eager = True
+                llm_kwargs["enforce_eager"] = True
+                print("[WARN] retrying with enforce_eager=True")
+    if llm is None:
+        # Write a failure marker so find_failed_runs.py / aggregation can see it
+        # explicitly instead of just an empty dir.
+        (out_dir / "FAILED.txt").write_text(
+            f"{type(last_err).__name__}: {last_err}\n")
+        raise SystemExit(f"[FATAL] engine build failed after retries: {last_err}")
+    tokenizer = AutoTokenizer.from_pretrained(args.model, trust_remote_code=True)
+
+    # ── Smart prompt selection (needs tokenizer) ──────────────────────────
+    # Prefer prompts that fit natively within the model context window.
+    # Only fall back to truncation if not enough fitting prompts exist.
+    MODEL_MAX_LEN = 40960    # Qwen3-8B context window
+    max_prompt_tok = (args.max_prompt_tokens
+                      if args.max_prompt_tokens > 0
+                      else MODEL_MAX_LEN - args.max_tokens - 64)
+
+    def _prompt_from_row(r):
+        return (r.get("prompt") or r.get("input") or
+                r.get("question") or r.get("problem_statement") or
+                r.get("text") or r.get("content") or "")
+
+    def _tok_len(text):
+        approx = len(text) // 4
+        if approx < max_prompt_tok * 0.8:
+            return approx   # definitely fits — skip expensive tokenize
+        return len(tokenizer.encode(text, add_special_tokens=False))
+
+    target   = args.limit if args.limit > 0 else len(rows)
+    fits     = []
+    too_long = []
+    for r in rows:
+        p = _prompt_from_row(r)
+        if _tok_len(p) <= max_prompt_tok:
+            fits.append(r)
+        else:
+            too_long.append(r)
+        if len(fits) >= target:
+            break
+
+    if len(fits) >= target:
+        rows = fits[:target]
+        print(f"[DATA] {len(rows)} prompts fit natively "
+              f"(skipped {len(too_long)} over-length prompts)")
+    else:
+        needed    = target - len(fits)
+        truncated = []
+        for r in too_long[:needed]:
+            p   = _prompt_from_row(r)
+            ids = tokenizer.encode(p, add_special_tokens=False)[:max_prompt_tok]
+            r   = dict(r)
+            for field in ["prompt","input","question","problem_statement","text","content"]:
+                if field in r:
+                    r[field] = tokenizer.decode(ids)
+                    break
+            truncated.append(r)
+        rows = fits + truncated
+        print(f"[DATA] {len(fits)} fit natively + "
+              f"{len(truncated)} truncated to {max_prompt_tok} tokens "
+              f"(target={target})")
+
+    print(f"[DATA] {len(rows)} prompts selected for benchmarking")
+
+    sp = SamplingParams(
+        temperature=args.temperature,
+        top_p=args.top_p,
+        max_tokens=args.max_tokens,
+        logprobs=args.top_logprobs,
+        seed=args.seed,
+    )
+
+    # ── One-time debug: dump get_metrics() and spec-related engine attrs ──
+    def _debug_spec_attrs(llm, out_path):
+        import io
+        buf = io.StringIO()
+        engine = llm.llm_engine
+
+        buf.write("=== engine.get_metrics() ===\n")
+        try:
+            m = engine.get_metrics()
+            buf.write(f"type: {type(m)}  len: {len(m) if hasattr(m,'__len__') else '?'}\n")
+            if isinstance(m, list):
+                for i, item in enumerate(m):
+                    buf.write(f"\n--- item[{i}] type={type(item)} ---\n")
+                    buf.write(f"  repr: {repr(item)[:500]}\n")
+                    if hasattr(item, "__dict__"):
+                        for k, v in vars(item).items():
+                            buf.write(f"  .{k} = {repr(v)[:200]}\n")
+                    elif hasattr(item, "_fields"):  # namedtuple
+                        for k in item._fields:
+                            buf.write(f"  .{k} = {repr(getattr(item,k))[:200]}\n")
+                    else:
+                        for attr in sorted(dir(item)):
+                            if attr.startswith("_"): continue
+                            try:
+                                buf.write(f"  .{attr} = {repr(getattr(item,attr))[:200]}\n")
+                            except Exception as e:
+                                buf.write(f"  .{attr} => {e}\n")
+            elif m is not None:
+                for attr in sorted(dir(m)):
+                    if attr.startswith("__"): continue
+                    try:
+                        buf.write(f"  .{attr} = {repr(getattr(m, attr))[:200]}\n")
+                    except Exception as e:
+                        buf.write(f"  .{attr} => {e}\n")
+        except Exception as e:
+            buf.write(f"ERROR: {e}\n")
+
+        buf.write("\n=== spec/accept/stat/metric attrs on engine ===\n")
+        def walk(obj, prefix, depth=0):
+            if depth > 3: return
+            for attr in sorted(dir(obj)):
+                if attr.startswith("__"): continue
+                if any(kw in attr.lower() for kw in
+                       ("spec","accept","draft","reject","sampler","stat","metric","worker")):
+                    try:
+                        val = getattr(obj, attr)
+                        buf.write(f"{prefix}.{attr} = {type(val).__name__} {repr(val)[:150]}\n")
+                        if hasattr(val, "__dict__") and depth < 2:
+                            walk(val, f"{prefix}.{attr}", depth+1)
+                    except Exception as e:
+                        buf.write(f"{prefix}.{attr} => ERROR: {e}\n")
+        walk(engine, "engine")
+        out_path.write_text(buf.getvalue())
+        print(f"[DEBUG] spec attrs -> {out_path}")
+
+    _debug_spec_attrs(llm, out_dir / "debug_spec_attrs.txt")
+
+    # ── run ──
+    summary_rows = []
+    trace_path = out_dir / "traces.jsonl"
+    debug_done = False   # dump get_metrics() after first real generate
+
+    with trace_path.open("w") as tf:
+        for row in tqdm(rows, desc=f"{args.experiment}/{run_name}/{args.method}/k{args.k}"):
+            # Fix: safe prompt extraction — field name varies by dataset
+            base_prompt = (row.get("prompt") or row.get("input") or
+                           row.get("question") or row.get("problem_statement") or
+                           row.get("text") or row.get("content"))
+            if not base_prompt:
+                raise KeyError(f"No prompt field in row. Keys: {list(row.keys())}")
+
+            # context truncation
+            # For F_context_growth, honour --max_prompt_tokens explicitly.
+            # For all other experiments, the smart row-selection above already
+            # ensures prompts fit within the model context — no truncation needed.
+            if args.max_prompt_tokens > 0:
+                base_prompt = truncate_prompt(base_prompt, tokenizer, args.max_prompt_tokens)
+
+            # multi-turn chaining
+            if args.num_turns > 1:
+                history = [{"role": "user", "content": base_prompt}]
+                all_turn_traces = []
+                for turn_idx in range(args.num_turns):
+                    turn_prompt = build_multiturn_prompt(history, tokenizer)
+                    trace = run_one(llm, tokenizer, turn_prompt, sp,
+                                    args.method, args.k)
+                    trace["turn"] = turn_idx
+                    all_turn_traces.append(trace)
+                    # feed output back as next user turn context
+                    history.append({"role": "assistant", "content": trace["text"]})
+                    if turn_idx < args.num_turns - 1:
+                        history.append({"role": "user",
+                                        "content": f"Continue based on the above."})
+                # Fix: proper multi-turn aggregation.
+                # Base: take last turn for string/list fields (text, token_ids, etc.)
+                trace = {k: all_turn_traces[-1][k] for k in all_turn_traces[0]}
+                # Sum: cumulative counters across all turns
+                trace["latency_s"]            = sum(t["latency_s"]        for t in all_turn_traces)
+                trace["n_output_tokens"]      = sum(t["n_output_tokens"]   for t in all_turn_traces)
+                trace["draft_tokens"]         = float(np.nansum([t.get("draft_tokens",0) or 0          for t in all_turn_traces]))
+                trace["accepted_tokens_total"]= float(np.nansum([t.get("accepted_tokens_total",0) or 0  for t in all_turn_traces]))
+                trace["rejected_tokens"]      = float(np.nansum([t.get("rejected_tokens",0) or 0       for t in all_turn_traces]))
+                # Mean: rate/quality metrics averaged across turns
+                trace["tokens_per_sec"]       = trace["n_output_tokens"] / max(trace["latency_s"], 1e-9)
+                trace["acceptance_rate"]      = float(np.nanmean([t.get("acceptance_rate",     float("nan")) for t in all_turn_traces]))
+                trace["mean_entropy"]         = float(np.nanmean([t.get("mean_entropy",        float("nan")) for t in all_turn_traces]))
+                trace["repetition_density"]   = float(np.nanmean([t.get("repetition_density",  float("nan")) for t in all_turn_traces]))
+                trace["rejection_rate"]       = float(np.nanmean([t.get("rejection_rate",      float("nan")) for t in all_turn_traces]))
+                trace["acceptance_decay_slope"]= float(np.nanmean([t.get("acceptance_decay_slope",float("nan")) for t in all_turn_traces]))
+                trace["entropy_trend"]        = float(np.nanmean([t.get("entropy_trend",       float("nan")) for t in all_turn_traces]))
+                trace["num_turns_completed"]  = len(all_turn_traces)
+            else:
+                trace = run_one(llm, tokenizer, base_prompt, sp, args.method, args.k)
+                trace["num_turns_completed"] = 1
+
+            # After first generate, re-dump with live metrics
+            if not debug_done:
+                _debug_spec_attrs(llm, out_dir / "debug_spec_attrs_after_generate.txt")
+                debug_done = True
+
+            n = trace["n_output_tokens"]
+            rec = {
+                "id":             row.get("id", f"row_{len(summary_rows)}"),
+                "workload":       args.workload,
+                "run_name":       run_name,
+                "experiment":     args.experiment,
+                "source_dataset": row.get("source_dataset",""),
+                "split":          row.get("split",""),
+                "method":         args.method,
+                "k":              args.k,
+                "ngram_lookup_min": args.ngram_lookup_min,
+                "ngram_lookup_max": args.ngram_lookup_max,
+                "temperature":    args.temperature,
+                "max_prompt_tokens": args.max_prompt_tokens,
+                "num_turns":      args.num_turns,
+                "num_turns_completed": trace["num_turns_completed"],
+                "seed":           args.seed,
+                "draft_model":    args.draft_model if args.method == "draft_sd" else "",
+                "eagle3_model":   args.eagle3_model if args.method == "eagle3" else "",
+                # core metrics
+                "n_output_tokens":   n,
+                "latency_s":         trace["latency_s"],
+                "tokens_per_sec":    trace["tokens_per_sec"],
+                # acceptance
+                "acceptance_rate":   trace["acceptance_rate"],
+                "accepted_tokens_per_verifier_pass": trace["accepted_tokens_per_verifier_pass"],
+                "draft_tokens":      trace["draft_tokens"],
+                "accepted_tokens_total": trace["accepted_tokens_total"],
+                "acceptance_metrics_source": trace["acceptance_metrics_source"],
+                # phase 1 required
+                "rollback_frequency":  trace["rollback_frequency"],
+                "verifier_utilization":trace["verifier_utilization"],
+                # structural
+                "mean_entropy":          trace["mean_entropy"],
+                "repetition_density":    trace["repetition_density"],
+                "acceptance_volatility": trace["acceptance_volatility"],
+                # per-position acceptance (phase 2 — eagle3/draft_sd)
+                "accepted_per_draft":    trace.get("accepted_per_draft", float("nan")),
+                "accept_rate_pos_0":     trace.get("accept_rate_pos_0",  float("nan")),
+                "accept_rate_pos_1":     trace.get("accept_rate_pos_1",  float("nan")),
+                "accept_rate_pos_2":     trace.get("accept_rate_pos_2",  float("nan")),
+                "accept_rate_pos_3":     trace.get("accept_rate_pos_3",  float("nan")),
+                # latency breakdown (engine histograms — more accurate than perf_counter)
+                "ttft_s":               trace.get("ttft_s_mean",         float("nan")),
+                "itl_s":                trace.get("itl_s_mean",          float("nan")),
+                "prefill_time_s":       trace.get("prefill_time_s_mean", float("nan")),
+                "decode_time_s":        trace.get("decode_time_s_mean",  float("nan")),
+                "tpot_s":               trace.get("tpot_s_mean",         float("nan")),
+                "e2e_latency_engine_s": trace.get("e2e_latency_s_mean",  float("nan")),
+                # cache (phase 2 workload characterization)
+                "prefix_cache_hit_rate":trace.get("prefix_cache_hit_rate", float("nan")),
+                "prompt_cache_frac":    trace.get("prompt_cache_frac",      float("nan")),
+                "kv_cache_usage_perc":  trace.get("kv_cache_usage_perc",    float("nan")),
+                # compute cost
+                "flops_per_gpu":        trace.get("flops_per_gpu",       float("nan")),
+                "read_bytes_per_gpu":   trace.get("read_bytes_per_gpu",  float("nan")),
+                # ── rejection analysis ──────────────────────────────────
+                "rejected_tokens":         trace.get("rejected_tokens",         float("nan")),
+                "rejection_rate":          trace.get("rejection_rate",          float("nan")),
+                "first_rejection_pos":     trace.get("first_rejection_pos",     float("nan")),
+                "rejection_concentration": trace.get("rejection_concentration", float("nan")),
+                "rejection_severity":      trace.get("rejection_severity",      float("nan")),
+                "acceptance_decay_slope":  trace.get("acceptance_decay_slope",  float("nan")),
+                # ── intra-sequence windows ──────────────────────────────
+                "entropy_w0_mean":  trace.get("entropy_w0_mean",  float("nan")),
+                "entropy_w1_mean":  trace.get("entropy_w1_mean",  float("nan")),
+                "entropy_w2_mean":  trace.get("entropy_w2_mean",  float("nan")),
+                "entropy_trend":    trace.get("entropy_trend",    float("nan")),
+                "entropy_range":    trace.get("entropy_range",    float("nan")),
+                "high_entropy_frac":trace.get("high_entropy_frac",float("nan")),
+                # ── entropy bucket + oracle k ───────────────────────────
+                "entropy_bucket":         trace.get("entropy_bucket",         "unknown"),
+                "oracle_k_estimated":     trace.get("oracle_k_estimated",     float("nan")),
+                "oracle_expected_tokens": trace.get("oracle_expected_tokens", float("nan")),
+                "oracle_k_vs_k4_gain":    trace.get("oracle_k_vs_k4_gain",    float("nan")),
+            }
+            summary_rows.append(rec)
+            tf.write(json.dumps({**rec,
+                                  "token_ids":    trace["token_ids"],
+                                  "entropy":      trace["entropy"],
+                                  "accepted":     trace["accepted"],
+                                  "rejected":     trace["rejected"],
+                                  "text":         trace["text"]}) + "\n")
+
+    pd.DataFrame(summary_rows).to_csv(out_dir / "summary.csv", index=False)
+    print(f"[DONE] {out_dir}  ({len(summary_rows)} rows)")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,29 @@
+verifiers:
+  qwen3-8b:
+    hf_id: Qwen/Qwen3-8B
+    dtype: bfloat16
+    role: primary
+
+  llama-3-8b:
+    hf_id: meta-llama/Meta-Llama-3-8B
+    dtype: bfloat16
+    role: general
+
+  deepseek-coder:
+    hf_id: deepseek-ai/deepseek-coder-7b-instruct-v1.5
+    dtype: bfloat16
+    role: code
+
+  qwen2.5-coder-7b:
+    hf_id: Qwen/Qwen2.5-Coder-7B-Instruct
+    dtype: bfloat16
+    role: code
+
+drafters:
+  qwen2.5-1.5b:
+    hf_id: Qwen/Qwen2.5-1.5B
+    dtype: bfloat16
+
+  tinyllama:
+    hf_id: TinyLlama/TinyLlama-1.1B-Chat-v1.0
+    dtype: bfloat16

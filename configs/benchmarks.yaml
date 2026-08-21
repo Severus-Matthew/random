@@ -1,0 +1,42 @@
+benchmarks:
+  humaneval:
+    type: code
+    hf_path: openai_humaneval
+    split: test
+    metric: pass@1
+
+  mbpp:
+    type: code
+    hf_path: mbpp
+    split: test
+    metric: pass@1
+
+  gsm8k:
+    type: math
+    hf_path: gsm8k
+    config: main
+    split: test
+    metric: exact_match
+
+  math:
+    type: math_hard
+    hf_path: hendrycks/competition_math
+    split: test
+    metric: exact_match
+
+  gpqa:
+    type: reasoning
+    hf_path: Idavidrein/gpqa
+    split: train
+    metric: accuracy
+
+  apps:
+    type: code_hard
+    hf_path: codeparrot/apps
+    split: test
+    metric: pass@1
+
+  verilogeval:
+    type: hardware
+    hf_path: TBD
+    metric: pass@1

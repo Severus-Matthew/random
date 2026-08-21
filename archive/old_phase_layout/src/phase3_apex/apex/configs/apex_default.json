@@ -1,0 +1,53 @@
+{
+  "target_model": "Qwen/Qwen3-8B",
+  "draft_model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "eagle3_model": "RedHatAI/Qwen3-8B-speculator.eagle3",
+  "candidate_depths": [1, 2, 4, 8, 16],
+  "hazard_estimator": {
+    "type": "beta_bernoulli",
+    "max_depth": 16,
+    "alpha": 1.0,
+    "beta": 1.0
+  },
+  "cost_model": {
+    "verifier_ms": 1.0,
+    "draft_ms_per_token": 0.0,
+    "controller_ms": 0.0,
+    "fixed_overhead_ms": 0.0
+  },
+  "slow_controller": {
+    "low_entropy": 1.0,
+    "high_entropy": 3.0,
+    "high_repetition": 0.35
+  },
+  "drafter_training": {
+    "conditioner": "lora",
+    "lora_rank": 8,
+    "lora_alpha": 16,
+    "lora_dropout": 0.05,
+    "rejection_bonus": 1.0,
+    "lambda_hazard": 1.0,
+    "lambda_flat": 0.01,
+    "lambda_kl": 0.01
+  },
+  "controller_training": {
+    "first_stage": "linucb_bandit",
+    "second_stage": "ppo",
+    "reward": {
+      "waste_penalty": 0.05,
+      "tail_latency_penalty": 0.0,
+      "target_latency_ms": null,
+      "switch_penalty": 0.0
+    }
+  },
+  "workloads": [
+    "code_gen",
+    "mathematical_reasoning",
+    "hardware_gen",
+    "long_horizon_swe",
+    "long_chain_reasoning",
+    "long_context_completion",
+    "conversational_generation",
+    "rl_rollout_generation"
+  ]
+}

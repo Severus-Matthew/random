@@ -1,0 +1,19 @@
+defaults:
+  max_new_tokens: 512
+  temperature: 1.0
+  top_p: 1.0
+  seed: 42
+  device: cuda
+  dtype: bfloat16
+
+speculation:
+  default_k: 5
+  max_k: 10
+  min_k: 1
+
+logging:
+  use_wandb: true
+  wandb_project: adaptive_speculative_inference
+  log_dir: results/logs
+  save_outputs: true
+  output_dir: results/outputs

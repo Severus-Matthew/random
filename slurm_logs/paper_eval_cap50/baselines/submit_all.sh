@@ -1,0 +1,17 @@
+#!/bin/bash
+set -euo pipefail
+sbatch slurm_logs/paper_eval_cap50/baselines/base_eagle3_k1.sbatch
+sbatch slurm_logs/paper_eval_cap50/baselines/base_eagle3_k2.sbatch
+sbatch slurm_logs/paper_eval_cap50/baselines/base_eagle3_k4.sbatch
+sbatch slurm_logs/paper_eval_cap50/baselines/base_eagle3_k8.sbatch
+sbatch slurm_logs/paper_eval_cap50/baselines/base_eagle3_k16.sbatch
+sbatch slurm_logs/paper_eval_cap50/baselines/base_ngram_sd_k1.sbatch
+sbatch slurm_logs/paper_eval_cap50/baselines/base_ngram_sd_k2.sbatch
+sbatch slurm_logs/paper_eval_cap50/baselines/base_ngram_sd_k4.sbatch
+sbatch slurm_logs/paper_eval_cap50/baselines/base_ngram_sd_k8.sbatch
+sbatch slurm_logs/paper_eval_cap50/baselines/base_ngram_sd_k16.sbatch
+sbatch slurm_logs/paper_eval_cap50/baselines/base_draft_sd_k1.sbatch
+sbatch slurm_logs/paper_eval_cap50/baselines/base_draft_sd_k2.sbatch
+sbatch slurm_logs/paper_eval_cap50/baselines/base_draft_sd_k4.sbatch
+sbatch slurm_logs/paper_eval_cap50/baselines/base_draft_sd_k8.sbatch
+sbatch slurm_logs/paper_eval_cap50/baselines/base_draft_sd_k16.sbatch

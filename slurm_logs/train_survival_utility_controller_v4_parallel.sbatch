@@ -1,12 +1,10 @@
 #!/bin/bash
 #SBATCH --job-name=apex_fast_v4_3gpu
-#SBATCH --partition=c # Partition (queue) name
+#SBATCH --partition=dev # Partition (queue) name
 #SBATCH --output=slurm_logs/apex_fast_v4_3gpu_%j.out
 #SBATCH --error=slurm_logs/apex_fast_v4_3gpu_%j.err
 #SBATCH --gres=gpu:3
 #SBATCH --cpus-per-task=48
-#SBATCH --mem=360G
-#SBATCH --time=48:00:00
 
 set -euo pipefail
 
