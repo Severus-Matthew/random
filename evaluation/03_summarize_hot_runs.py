@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from evaluation.apex_eval_utils import (
+from apex_eval_utils import (
     add_waste_percent,
     concat_with_run_metadata,
     ensure_dir,

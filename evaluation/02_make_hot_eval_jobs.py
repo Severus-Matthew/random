@@ -60,13 +60,14 @@ def sbatch_text(
     device: str,
     every_n: int,
     switch_margin: float,
+    log_dir: Path,
 ):
     input_lines = " \\\n    ".join(workload_files)
     cap_arg = f"--max-prompts-per-file {int(max_prompts_per_file)}" if int(max_prompts_per_file) > 0 else "--max-prompts-per-file 0"
     return f'''#!/bin/bash
 #SBATCH --job-name={job_name[:48]}
-#SBATCH --output=slurm_logs/evaluation_jobs/{job_name}_%j.out
-#SBATCH --error=slurm_logs/evaluation_jobs/{job_name}_%j.err
+#SBATCH --output={log_dir}/{job_name}_%j.out
+#SBATCH --error={log_dir}/{job_name}_%j.err
 #SBATCH --partition={partition}
 #SBATCH --gres=gpu:{gpus}
 #SBATCH --cpus-per-task={cpus}
@@ -166,6 +167,7 @@ def main():
                 run_out = result_root / run_name
                 text = sbatch_text(
                     job_name=job_name,
+                    log_dir=out_dir,
                     out_dir=run_out,
                     slow_router_dir=args.slow_router_dir,
                     model_dir=model_dir,
